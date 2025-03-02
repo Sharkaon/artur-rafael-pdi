@@ -33,9 +33,9 @@ console.log('👋 This message is being logged by "renderer.ts", included via Vi
 type Red = number;
 type Blue = number;
 type Green = number;
-type OtherInfoIForgotWhatItIs = number;
+type White = number;
 
-type RGBPixel = [Red, Blue, Green, OtherInfoIForgotWhatItIs]
+type RGBPixel = [Red, Blue, Green, White]
 type RGBLine = RGBPixel[];
 
 type RGBImageMatrix = RGBLine[];
