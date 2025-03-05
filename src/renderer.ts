@@ -33,9 +33,10 @@ console.log('👋 This message is being logged by "renderer.ts", included via Vi
 type Red = number;
 type Blue = number;
 type Green = number;
-type White = number;
+// Transparency
+type AlphaChannel = number;
 
-type RGBPixel = [Red, Blue, Green, White]
+type RGBPixel = [Red, Blue, Green, AlphaChannel]
 type RGBLine = RGBPixel[];
 
 type RGBImageMatrix = RGBLine[];
@@ -81,6 +82,6 @@ const convertImageToCanva = () => {
       imgElement.src = filePath;
       imgElement.style.display = 'block';
 
-      setTimeout(convertImageToCanva, 1000);
+      imgElement.addEventListener('load', convertImageToCanva);
     }
 });
