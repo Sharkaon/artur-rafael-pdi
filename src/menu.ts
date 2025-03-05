@@ -38,9 +38,99 @@ export class PDIMenuBuilder {
   private getMenuItems = (): MenuItem[] => {
     const fileMenuItem = new MenuItem({
       label: "Arquivo",
-      click: () => this.openFile()
+      submenu:
+      [
+        {
+          label: 'Abrir imagem',
+          click: () => this.openFile()
+        },
+        {
+          label: 'Salvar imagem',
+          click: () => console.log("Salvar imagem")
+        },
+        {
+          label: 'Sobre',
+          click: () => console.log("Sobre")
+        },
+        {
+          label: 'Sair',
+          click: () => "Sair"
+        }
+      ]
     });
-
-    return [fileMenuItem]
+    const geometricTransformationsMenuItem = new MenuItem({
+      label: "Transformações geométricas", 
+      submenu: 
+      [
+        {
+            label: 'Transladar',
+            click: () => console.log("Transladar")
+        },
+        {
+            label: 'Rotacionar',
+            click: () => console.log("Rotacionar")
+        },
+        {
+            label: 'Espelhar',
+            click: () => console.log("Espelhar")
+        },
+        {
+          label: 'Aumentar',
+          click: () => console.log("Aumentar")
+        },
+        {
+          label: 'Diminuir',
+          click: () => console.log("Diminuir")
+        },
+      ],
+    });
+    const filterMenuItem = new MenuItem({
+      label: "Filtros",
+      submenu: 
+      [
+        {
+          label: 'Grayscale',
+          click: () => console.log("Grayscale ")
+        },
+        {
+          label: 'Passa Baixa',
+          click: () => console.log("Passa Baixa")
+        },
+        {
+          label: 'Passa Alta',
+          click: () => console.log("Passa Alta")
+        },
+        {
+          label: 'Threshold ',
+          click: () => console.log("Threshold ")
+        },
+      ]
+    });
+    const mathMorphologyMenuItem = new MenuItem({
+      label: "Morfologia matemática",
+      submenu: 
+      [
+        {
+          label: 'Dilatação',
+          click: () => console.log("Dilatação")
+        },
+        {
+          label: 'Erosão',
+          click: () => console.log("Erosão")
+        },
+        {
+          label: 'Abertura',
+          click: () => console.log("Abertura")
+        },
+        {
+          label: 'Fechamento',
+          click: () => console.log("Fechamento")
+        },
+      ]
+    })
+    const featureExtractionMenuItem = new MenuItem({
+      label: "DESAFIO"
+    })
+    return [fileMenuItem, geometricTransformationsMenuItem, mathMorphologyMenuItem, featureExtractionMenuItem]
   }
 }

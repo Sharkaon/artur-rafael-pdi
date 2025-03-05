@@ -36,16 +36,34 @@ type Green = number;
 // Transparency
 type AlphaChannel = number;
 
-type RGBPixel = [Red, Blue, Green, AlphaChannel]
+type RGBPixel = [Red, Green, Blue, AlphaChannel]
 type RGBLine = RGBPixel[];
 
 type RGBImageMatrix = RGBLine[];
 
-const convertCanvaArrayToMatrix = (data: Uint8ClampedArray<ArrayBufferLike>) => {
-  const pdiMatrix: RGBImageMatrix = [];
-  // TODO: Implementar esta conversão.
-}
+let pdiMatrix: RGBImageMatrix = [];
 
+const convertCanvaArrayToMatrix = (data: Uint8ClampedArray) => {
+  const arrayLength = data.length / 4; // numero de pixeis por linha
+  const arrayHeight = data.length / (4 * arrayLength); // numero de linhas
+
+  for (let i = 0; i < arrayHeight; i++) {
+    const row: RGBPixel[] = [];
+    for (let j = 0; j < arrayLength; j++) {
+      const index = (i * arrayLength + j) * 4; // Calculate the index in the Uint8ClampedArray
+      const pixel: RGBPixel = [
+        data[index],     // Red
+        data[index + 1], // Green
+        data[index + 2], // Blue
+        data[index + 3], // Alpha
+      ];
+      row.push(pixel);
+    }
+    pdiMatrix.push(row);
+  }
+
+  return pdiMatrix;
+};
 const convertImageToCanva = () => {
     const newImgElement = document.getElementById('image') as HTMLImageElement;
 
@@ -67,8 +85,6 @@ const convertImageToCanva = () => {
     // Finally, get the image data
     // ('data' is an array of RGBA pixel values for each pixel)
     const { data } = ctx.getImageData(0, 0, w, h);
-
-    console.log(data)
     convertCanvaArrayToMatrix(data);
 }
 
@@ -82,6 +98,29 @@ const convertImageToCanva = () => {
       imgElement.src = filePath;
       imgElement.style.display = 'block';
 
-      imgElement.addEventListener('load', convertImageToCanva);
+      //imgElement.addEventListener('load', convertImageToCanva);
+    }
+    const secondImgElement = document.getElementById('second-image') as HTMLImageElement;
+    if (secondImgElement) {
+      secondImgElement.src = filePath;
+      secondImgElement.style.display = 'block';
+
+      secondImgElement.addEventListener('load', () => {
+        convertImageToCanva();
+        convertImageGrayscale();
+      });
     }
 });
+
+const convertImageGrayscale = () => {
+  
+  for(let i = 0; i < pdiMatrix.length; i++){
+    const row = pdiMatrix[i];
+    for(let j = 0; j < row.length; j++){
+      const pixel = row[j];
+      const [Red, Green, Blue, AlphaChannel] = pixel;
+      let grayScale = (Red + Green + Blue) / 3;
+      row[j] = [grayScale, grayScale, grayScale, 255];
+    }
+  }
+}
