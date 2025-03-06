@@ -123,9 +123,7 @@ const setImage = (filePath: string, imageElementId: string): HTMLImageElement =>
 }
 
 (window as any).electronAPI.onFileSelected((filePath: string) => {
-    // TODO: Corrigir o file path incorreto
-    filePath = 'lena.jpg';
-  
+    if (!filePath.startsWith("file:///")) filePath = `file:///${filePath}`;
     setImage(filePath, 'image');
 
     const secondImgElement = setImage(filePath, 'second-image');
