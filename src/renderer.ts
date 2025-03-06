@@ -41,7 +41,10 @@ type RGBLine = RGBPixel[];
 
 type RGBImageMatrix = RGBLine[];
 
-let pdiMatrix: RGBImageMatrix = [];
+const pdiMatrix: RGBImageMatrix = [];
+
+const FULLY_TRANSPARENT: AlphaChannel = 0;
+const FULLY_OPAQUE: AlphaChannel = 255;
 
 const convertCanvaArrayToMatrix = (data: Uint8ClampedArray) => {
   const arrayLength = data.length / 4; // numero de pixeis por linha
@@ -64,12 +67,11 @@ const convertCanvaArrayToMatrix = (data: Uint8ClampedArray) => {
 
   return pdiMatrix;
 };
+
 const convertImageToCanva = () => {
     const newImgElement = document.getElementById('image') as HTMLImageElement;
 
     const w = newImgElement.width, h = newImgElement.height;
-
-    console.log({ w, h });
 
     // Create a Canvas element
     const canvas = document.createElement('canvas');
@@ -88,23 +90,46 @@ const convertImageToCanva = () => {
     convertCanvaArrayToMatrix(data);
 }
 
+const setNewImage = (newMatrix: RGBImageMatrix): void => {
+  const matrixAsArray = newMatrix.flat(2);
+
+  const imgToSet = document.getElementById('second-image') as HTMLImageElement;
+  const { width, height } = imgToSet
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = width;
+  canvas.height = height;
+
+  const idata = ctx.createImageData(width, height);
+  idata.data.set(matrixAsArray);
+  ctx.putImageData(idata, 0, 0);
+
+  const dataUrl = canvas.toDataURL();
+  canvas.remove();
+
+  imgToSet.src = dataUrl;
+}
+
+const setImage = (filePath: string, imageElementId: string): HTMLImageElement => {
+    const imgElement = document.getElementById(imageElementId) as HTMLImageElement;
+    if (imgElement) {
+      imgElement.src = filePath;
+      imgElement.style.display = 'block';
+    }
+
+    return imgElement;
+}
+
 (window as any).electronAPI.onFileSelected((filePath: string) => {
     // TODO: Corrigir o file path incorreto
     filePath = 'lena.jpg';
   
-    // Atualiza o src da imagem e a exibe
-    const imgElement = document.getElementById('image') as HTMLImageElement;
-    if (imgElement) {
-      imgElement.src = filePath;
-      imgElement.style.display = 'block';
+    setImage(filePath, 'image');
 
-      //imgElement.addEventListener('load', convertImageToCanva);
-    }
-    const secondImgElement = document.getElementById('second-image') as HTMLImageElement;
+    const secondImgElement = setImage(filePath, 'second-image');
     if (secondImgElement) {
-      secondImgElement.src = filePath;
-      secondImgElement.style.display = 'block';
-
       secondImgElement.addEventListener('load', () => {
         convertImageToCanva();
         convertImageGrayscale();
@@ -113,14 +138,16 @@ const convertImageToCanva = () => {
 });
 
 const convertImageGrayscale = () => {
-  
-  for(let i = 0; i < pdiMatrix.length; i++){
+  for (let i = 0; i < pdiMatrix.length; i++) {
     const row = pdiMatrix[i];
-    for(let j = 0; j < row.length; j++){
+
+    for (let j = 0; j < row.length; j++) {
       const pixel = row[j];
-      const [Red, Green, Blue, AlphaChannel] = pixel;
-      let grayScale = (Red + Green + Blue) / 3;
-      row[j] = [grayScale, grayScale, grayScale, 255];
+      const [Red, Green, Blue, _] = pixel;
+      const grayScale = (Red + Green + Blue) / 3;
+      row[j] = [grayScale, grayScale, grayScale, FULLY_OPAQUE];
     }
   }
+
+  setNewImage(pdiMatrix);
 }
