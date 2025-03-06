@@ -130,12 +130,12 @@ const setImage = (filePath: string, imageElementId: string): HTMLImageElement =>
     if (secondImgElement) {
       secondImgElement.addEventListener('load', () => {
         convertImageToCanva();
-        convertImageGrayscale();
+        applyGrayscale();
       });
     }
 });
 
-const convertImageGrayscale = () => {
+const applyGrayscale = () => {
   for (let i = 0; i < pdiMatrix.length; i++) {
     const row = pdiMatrix[i];
 
