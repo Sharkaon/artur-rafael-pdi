@@ -35,6 +35,10 @@ export class PDIMenuBuilder {
     this.mainWindow.webContents.send('file-selected', filePath);
   }
 
+  private apply(effect: string): void {
+    this.mainWindow.webContents.send('apply', effect)
+  }
+
   private getMenuItems = (): MenuItem[] => {
     const fileMenuItem = new MenuItem({
       label: "Arquivo",
@@ -90,7 +94,7 @@ export class PDIMenuBuilder {
       [
         {
           label: 'Grayscale',
-          click: () => console.log("Grayscale ")
+          click: () => this.apply('grayscale'),
         },
         {
           label: 'Passa Baixa',
@@ -131,6 +135,6 @@ export class PDIMenuBuilder {
     const featureExtractionMenuItem = new MenuItem({
       label: "DESAFIO"
     })
-    return [fileMenuItem, fileMenuItem, geometricTransformationsMenuItem, mathMorphologyMenuItem, featureExtractionMenuItem]
+    return [fileMenuItem, geometricTransformationsMenuItem, filterMenuItem, mathMorphologyMenuItem, featureExtractionMenuItem]
   }
 }

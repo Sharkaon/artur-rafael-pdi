@@ -14,4 +14,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
       callback(filePath); // Chama a função de callback com o caminho do arquivo
     });
   },
+  onEffectClick: ((callback: (effect: string) => void) => {
+    ipcRenderer.on('apply', (_, effect) => {
+      callback(effect);
+    });
+  }),
 });
