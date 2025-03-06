@@ -19,7 +19,6 @@ const createWindow = () => {
       webSecurity: false,
     },
   });
-
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
@@ -42,12 +41,19 @@ ipcMain.on("chooseFile", (event, arg) => {
     properties: ["openFile"],
     filters: [{ name: "Images", extensions: ["png","jpg","jpeg"] }]
   });
-
   result.then(({canceled, filePaths, bookmarks}) => {
     const base64 = fs.readFileSync(filePaths[0]).toString('base64');
     event.reply("chosenFile", base64);
   });
 });
+
+//RECEBE DADOS DO RENDERER
+ipcMain.on('send-data', (event, data) => {
+  handleReceiveData(event, data)
+})
+function handleReceiveData(event: any, data: any) {
+  console.log(data)
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -70,6 +76,8 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

@@ -19,4 +19,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
       callback(effect);
     });
   }),
+  onSendData: ((data: any) => ipcRenderer.send('set-title', data))
 });

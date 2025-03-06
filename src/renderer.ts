@@ -73,3 +73,11 @@ const setImage = (filePath: string, imageElementId: string): HTMLImageElement =>
 
   digitalImage.apply(callback);
 });
+
+//RECEBE DADOS DO FRONT
+var nameValue = document.getElementById("test") as HTMLInputElement;
+var submitButton = document.getElementById("submit") as HTMLButtonElement;
+submitButton.addEventListener("click", function() {
+  console.log(nameValue.value);
+  (window as any).electronAPI.onSendData(nameValue.value);
+});
