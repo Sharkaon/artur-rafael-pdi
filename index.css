@@ -1,0 +1,19 @@
+body{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color:rgb(35, 35, 35);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 90vh;
+}
+
+#image{
+    margin: 10px;
+    display: flex;
+}
+#second-image{
+    margin: 10px;
+    display: flex;
+}
