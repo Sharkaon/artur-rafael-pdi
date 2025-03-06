@@ -131,6 +131,6 @@ export class PDIMenuBuilder {
     const featureExtractionMenuItem = new MenuItem({
       label: "DESAFIO"
     })
-    return [fileMenuItem, geometricTransformationsMenuItem, mathMorphologyMenuItem, featureExtractionMenuItem]
+    return [fileMenuItem, fileMenuItem, geometricTransformationsMenuItem, mathMorphologyMenuItem, featureExtractionMenuItem]
   }
 }
