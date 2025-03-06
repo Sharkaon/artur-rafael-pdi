@@ -14,7 +14,7 @@ export class DigitalImage {
     this.setNewImage(newMatrix);
   }
 
-  public setNewImage(newMatrix: RGBImageMatrix) {
+  private setNewImage(newMatrix: RGBImageMatrix) {
     const matrixAsArray = newMatrix.flat(2);
 
     const { width, height } = this.destinyImage;
