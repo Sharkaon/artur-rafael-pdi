@@ -27,7 +27,7 @@
  */
 
 import { DigitalImage } from './DigitalImage';
-import { grayScale } from './effects/filters';
+import { grayScale, Threshold } from './effects/filters';
 import './index.css';
 import { Effect, RGBImageMatrix } from './types';
 
@@ -37,6 +37,7 @@ let digitalImage: DigitalImage;
 
 const EffectCallbacks: Record<Effect, (pdiMatrix: RGBImageMatrix) => RGBImageMatrix> = {
   grayscale: grayScale,
+  threshold: Threshold,
 } as const;
 
 const setImage = (filePath: string, imageElementId: string): HTMLImageElement => {

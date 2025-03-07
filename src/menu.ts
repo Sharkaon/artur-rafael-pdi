@@ -105,8 +105,8 @@ export class PDIMenuBuilder {
           click: () => console.log("Passa Alta")
         },
         {
-          label: 'Threshold ',
-          click: () => console.log("Threshold ")
+          label: 'Threshold',
+          click: () => this.apply('threshold'),
         },
       ]
     });
