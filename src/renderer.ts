@@ -76,8 +76,8 @@ const setImage = (filePath: string, imageElementId: string): HTMLImageElement =>
 });
 
 //RECEBE DADOS DO FRONT
-var nameValue = document.getElementById("test") as HTMLInputElement;
-var submitButton = document.getElementById("submit") as HTMLButtonElement;
+const nameValue = document.getElementById("test") as HTMLInputElement;
+const submitButton = document.getElementById("submit") as HTMLButtonElement;
 submitButton.addEventListener("click", function() {
   console.log(nameValue.value);
   (window as any).electronAPI.onSendData(nameValue.value);
