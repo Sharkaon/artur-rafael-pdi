@@ -41,12 +41,14 @@ const handleThreshold = (matrix: RGBImageMatrix) => {
   
   const brightnessInput = document.createElement('input')
   brightnessInput.setAttribute('id', 'brightnessInput');
+  brightnessInput.setAttribute('type', 'number')
 
   const contrastInput = document.createElement('input');
   contrastInput.setAttribute('id', 'contrastInput');
+  contrastInput.setAttribute('type', 'number')
 
   const submitButton = document.createElement('button');
-  submitButton.onclick = () => {
+  const applyThreshold = () => {
     const contrastInput = document.getElementById('contrastInput') as HTMLInputElement;
     const brightnessInput = document.getElementById('brightnessInput') as HTMLInputElement;
 
@@ -55,6 +57,9 @@ const handleThreshold = (matrix: RGBImageMatrix) => {
       contrast: Number(contrastInput.value),
     }));
   }
+
+  submitButton.textContent = "Aplicar";
+  submitButton.onclick = applyThreshold;
 
   divForInputs.appendChild(brightnessInput);
   divForInputs.appendChild(contrastInput);
