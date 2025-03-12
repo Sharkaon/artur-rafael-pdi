@@ -47,8 +47,6 @@ const handleThreshold = (matrix: RGBImageMatrix) => {
 
   const submitButton = document.createElement('button');
   submitButton.onclick = () => {
-    console.log({ digitalImage });
-
     const contrastInput = document.getElementById('contrastInput') as HTMLInputElement;
     const brightnessInput = document.getElementById('brightnessInput') as HTMLInputElement;
 
