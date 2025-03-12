@@ -9,12 +9,14 @@ export class DigitalImage {
     this.destinyImage = document.getElementById('second-image') as HTMLImageElement;
   }
 
-  public apply(effectCallback: (matrix: RGBImageMatrix) => RGBImageMatrix): void {
+  public apply(effectCallback: (matrix: RGBImageMatrix) => RGBImageMatrix | void): void {
     const newMatrix = effectCallback(this.RGBMatrix);
+    if (!newMatrix) return;
+
     this.setNewImage(newMatrix);
   }
 
-  private setNewImage(newMatrix: RGBImageMatrix) {
+  public setNewImage(newMatrix: RGBImageMatrix) {
     const matrixAsArray = newMatrix.flat(2);
 
     const { width, height } = this.destinyImage;

@@ -17,16 +17,19 @@ const grayScale = (pdiMatrix: RGBImageMatrix): RGBImageMatrix => {
   return pdiMatrix;
 }
 
-const Threshold = (pdiMatrix: RGBImageMatrix): RGBImageMatrix => {
+const threshold = (pdiMatrix: RGBImageMatrix, options: {
+  brightness: number;
+  contrast: number;
+}): RGBImageMatrix => {
+  const { brightness, contrast } = options;
   pdiMatrix.forEach((row) => {
     for(let j = 0; j < row.length; j++) {
-      const brilho: number = 5;
-      const contraste: number = 1.5;
+
       const pixel = row[j]
       const [Red, Green, Blue, _] = pixel;
-      const adjustedRed = Math.min(Math.max(contraste * Red + brilho, 0), 255);
-      const adjustedGreen = Math.min(Math.max(contraste * Green + brilho, 0), 255);
-      const adjustedBlue = Math.min(Math.max(contraste * Blue + brilho, 0), 255);
+      const adjustedRed = Math.min(Math.max(contrast * Red + brightness, 0), 255);
+      const adjustedGreen = Math.min(Math.max(contrast * Green + brightness, 0), 255);
+      const adjustedBlue = Math.min(Math.max(contrast * Blue + brightness, 0), 255);
       const thresholdPixel: RGBPixel = [adjustedRed, adjustedGreen, adjustedBlue, FULLY_OPAQUE]
       row[j] = thresholdPixel;
     }
@@ -34,4 +37,4 @@ const Threshold = (pdiMatrix: RGBImageMatrix): RGBImageMatrix => {
   return pdiMatrix;
 }
 
-export { grayScale, Threshold };
+export { grayScale, threshold };

@@ -27,7 +27,8 @@
  */
 
 import { DigitalImage } from './DigitalImage';
-import { grayScale, Threshold } from './effects/filters';
+import { grayScale, threshold } from './effects/filters';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 import './index.css';
 import { Effect, RGBImageMatrix } from './types';
 
@@ -35,10 +36,45 @@ console.log('👋 This message is being logged by "renderer.ts", included via Vi
 
 let digitalImage: DigitalImage;
 
-const EffectCallbacks: Record<Effect, (pdiMatrix: RGBImageMatrix) => RGBImageMatrix> = {
+const handleThreshold = (matrix: RGBImageMatrix) => {
+  const divForInputs = document.getElementById('inputs');
+  
+  const brightnessInput = document.createElement('input')
+  brightnessInput.setAttribute('id', 'brightnessInput');
+
+  const contrastInput = document.createElement('input');
+  contrastInput.setAttribute('id', 'contrastInput');
+
+  const submitButton = document.createElement('button');
+  submitButton.onclick = () => {
+    console.log({ digitalImage });
+
+    const contrastInput = document.getElementById('contrastInput') as HTMLInputElement;
+    const brightnessInput = document.getElementById('brightnessInput') as HTMLInputElement;
+
+    digitalImage.apply(() => threshold(matrix, {
+      brightness: Number(brightnessInput.value),
+      contrast: Number(contrastInput.value),
+    }));
+  }
+
+  divForInputs.appendChild(brightnessInput);
+  divForInputs.appendChild(contrastInput);
+  divForInputs.appendChild(submitButton);
+}
+
+const EffectCallbacks: Record<Effect, (pdiMatrix: RGBImageMatrix) => RGBImageMatrix | void> = {
   grayscale: grayScale,
-  threshold: Threshold,
+  threshold: handleThreshold,
 } as const;
+
+// //RECEBE DADOS DO FRONT
+// const nameValue = document.getElementById("test") as HTMLInputElement;
+// const submitButton = document.getElementById("submit") as HTMLButtonElement;
+// submitButton.addEventListener("click", function() {
+//   console.log(nameValue.value);
+//   (window as any).electronAPI.onSendData(nameValue.value);
+// });
 
 const setImage = (filePath: string, imageElementId: string): HTMLImageElement => {
     const imgElement = document.getElementById(imageElementId) as HTMLImageElement;
@@ -63,9 +99,16 @@ const setImage = (filePath: string, imageElementId: string): HTMLImageElement =>
 });
 
 (window as any).electronAPI.onEffectClick((effect: Effect) => {
+  console.log({ digitalImage })
+  if (!digitalImage) {
+    console.log("Alert");
+  }
+
   console.log("Applying " + effect);
 
   const callback = EffectCallbacks[effect];
+
+  console.log(callback);
 
   if (!callback) {
     console.log('Not yet implemented');
@@ -73,12 +116,4 @@ const setImage = (filePath: string, imageElementId: string): HTMLImageElement =>
   }
 
   digitalImage.apply(callback);
-});
-
-//RECEBE DADOS DO FRONT
-const nameValue = document.getElementById("test") as HTMLInputElement;
-const submitButton = document.getElementById("submit") as HTMLButtonElement;
-submitButton.addEventListener("click", function() {
-  console.log(nameValue.value);
-  (window as any).electronAPI.onSendData(nameValue.value);
 });
