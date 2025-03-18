@@ -1,9 +1,9 @@
+import { ImageUpdateParams } from "../DigitalImage";
 import type { AlphaChannel, RGBImageMatrix, RGBPixel } from "../types";
 
-const FULLY_TRANSPARENT: AlphaChannel = 0;
 const FULLY_OPAQUE: AlphaChannel = 255;
 
-const grayScale = (pdiMatrix: RGBImageMatrix): RGBImageMatrix => {
+const grayScale = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
   pdiMatrix.forEach((row) => {
     for (let j = 0; j < row.length; j++) {
       const pixel = row[j];
@@ -14,13 +14,15 @@ const grayScale = (pdiMatrix: RGBImageMatrix): RGBImageMatrix => {
     }
   });
 
-  return pdiMatrix;
+  return {
+    newMatrix: pdiMatrix,
+  };
 }
 
 const threshold = (pdiMatrix: RGBImageMatrix, options: {
   brightness: number;
   contrast: number;
-}): RGBImageMatrix => {
+}): ImageUpdateParams => {
   const { brightness, contrast } = options;
   pdiMatrix.forEach((row) => {
     for(let j = 0; j < row.length; j++) {
@@ -34,7 +36,10 @@ const threshold = (pdiMatrix: RGBImageMatrix, options: {
       row[j] = thresholdPixel;
     }
   });
-  return pdiMatrix;
+
+  return {
+    newMatrix: pdiMatrix,
+  };
 }
 
 export { grayScale, threshold };

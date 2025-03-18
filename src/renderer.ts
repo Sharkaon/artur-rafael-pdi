@@ -26,58 +26,48 @@
  * ```
  */
 
-import { DigitalImage } from './DigitalImage';
+import { DigitalImage, ImageUpdateParams } from './DigitalImage';
 import { grayScale, threshold } from './effects/filters';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-import './index.css';
+import { translate } from './effects/geometrical-transformations';
+import { applyFromInputs } from './inputs';
 import { Effect, RGBImageMatrix } from './types';
+import './index.css';
 
 console.log('👋 This message is being logged by "renderer.ts", included via Vite');
+
+export type CallbackFunc = (matrix: RGBImageMatrix) => ImageUpdateParams | void;
 
 let digitalImage: DigitalImage;
 
 const handleThreshold = (matrix: RGBImageMatrix) => {
-  const divForInputs = document.getElementById('inputs');
-  
-  const brightnessInput = document.createElement('input')
-  brightnessInput.setAttribute('id', 'brightnessInput');
-  brightnessInput.setAttribute('type', 'number')
-
-  const contrastInput = document.createElement('input');
-  contrastInput.setAttribute('id', 'contrastInput');
-  contrastInput.setAttribute('type', 'number')
-
-  const submitButton = document.createElement('button');
-  const applyThreshold = () => {
-    const contrastInput = document.getElementById('contrastInput') as HTMLInputElement;
-    const brightnessInput = document.getElementById('brightnessInput') as HTMLInputElement;
-
-    digitalImage.apply(() => threshold(matrix, {
-      brightness: Number(brightnessInput.value),
-      contrast: Number(contrastInput.value),
-    }));
-  }
-
-  submitButton.textContent = "Aplicar";
-  submitButton.onclick = applyThreshold;
-
-  divForInputs.appendChild(brightnessInput);
-  divForInputs.appendChild(contrastInput);
-  divForInputs.appendChild(submitButton);
+  applyFromInputs(digitalImage, [{
+    label: 'Brilho',
+    name: 'brightness',
+    type: 'number'
+  }, {
+    label: 'Contraste',
+    name: 'contrast',
+    type: 'number'
+  }], threshold);
 }
 
-const EffectCallbacks: Record<Effect, (pdiMatrix: RGBImageMatrix) => RGBImageMatrix | void> = {
+const handleTranslate = (matrix: RGBImageMatrix) => {
+  applyFromInputs(digitalImage, [{
+    label: "Movimento no eixo X",
+    name: 'x',
+    type: "number"
+  }, {
+    label: "Movimento no eixo Y",
+    name: "y",
+    type: "number"
+  }], translate);
+}
+
+const EffectCallbacks: Record<Effect, CallbackFunc> = {
   grayscale: grayScale,
   threshold: handleThreshold,
+  translate: handleTranslate,
 } as const;
-
-// //RECEBE DADOS DO FRONT
-// const nameValue = document.getElementById("test") as HTMLInputElement;
-// const submitButton = document.getElementById("submit") as HTMLButtonElement;
-// submitButton.addEventListener("click", function() {
-//   console.log(nameValue.value);
-//   (window as any).electronAPI.onSendData(nameValue.value);
-// });
 
 const setImage = (filePath: string, imageElementId: string): HTMLImageElement => {
     const imgElement = document.getElementById(imageElementId) as HTMLImageElement;
@@ -110,8 +100,6 @@ const setImage = (filePath: string, imageElementId: string): HTMLImageElement =>
   console.log("Applying " + effect);
 
   const callback = EffectCallbacks[effect];
-
-  console.log(callback);
 
   if (!callback) {
     console.log('Not yet implemented');

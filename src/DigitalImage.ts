@@ -1,35 +1,58 @@
 import { RGBImageMatrix, RGBPixel } from "./types";
 
+type Position = {
+    x: number;
+    y: number;
+  };
+
+export type ImageUpdateParams = {
+  newMatrix: RGBImageMatrix;
+  position?: Position;
+};
+
 export class DigitalImage {
   private RGBMatrix: RGBImageMatrix = [];
-  private destinyImage: HTMLImageElement;
+  public destinyImage: HTMLImageElement;
 
   public constructor() {
     this.convertImageToCanva();
     this.destinyImage = document.getElementById('second-image') as HTMLImageElement;
   }
 
-  public apply(effectCallback: (matrix: RGBImageMatrix) => RGBImageMatrix | void): void {
-    const newMatrix = effectCallback(this.RGBMatrix);
-    if (!newMatrix) return;
+  public apply(effectCallback: (matrix: RGBImageMatrix) => ImageUpdateParams | void): void {
+    const output = effectCallback(this.RGBMatrix);
+    if (!output) return;
 
-    this.setNewImage(newMatrix);
+    const {
+      newMatrix,
+      position
+    } = output;
+
+    this.setNewImage({
+      newMatrix,
+      position: position ?? { x: 0, y: 0 },
+    });
   }
 
-  public setNewImage(newMatrix: RGBImageMatrix) {
+  public setNewImage({
+    newMatrix,
+    position,
+  }: ImageUpdateParams) {
     const matrixAsArray = newMatrix.flat(2);
+
+    const { x, y } = position
 
     const { width, height } = this.destinyImage;
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = width + x;
+    canvas.height = height + y;
 
     const idata = ctx.createImageData(width, height);
     idata.data.set(matrixAsArray);
-    ctx.putImageData(idata, 0, 0);
+    ctx.putImageData(idata, x, y);
 
     const dataUrl = canvas.toDataURL();
     canvas.remove();

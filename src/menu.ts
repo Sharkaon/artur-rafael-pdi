@@ -68,7 +68,7 @@ export class PDIMenuBuilder {
       [
         {
             label: 'Transladar',
-            click: () => console.log("Transladar")
+            click: () => this.apply('translate'),
         },
         {
             label: 'Rotacionar',
