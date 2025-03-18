@@ -15,7 +15,7 @@ export class DigitalImage {
   public destinyImage: HTMLImageElement;
 
   public constructor() {
-    this.convertImageToCanva();
+    this.RGBMatrix = this.convertImageToCanva();
     this.destinyImage = document.getElementById('second-image') as HTMLImageElement;
   }
 
@@ -58,11 +58,15 @@ export class DigitalImage {
     canvas.remove();
 
     this.destinyImage.src = dataUrl;
+    this.RGBMatrix = this.convertImageToCanva('second-image');
+    this.destinyImage = document.getElementById('second-image') as HTMLImageElement;
   }
 
   private convertCanvaArrayToMatrix(data: Uint8ClampedArray): RGBImageMatrix {
     const arrayLength = data.length / 4; // numero de pixeis por linha
     const arrayHeight = data.length / (4 * arrayLength); // numero de linhas
+
+    const rgbMatrix = [];
 
     for (let i = 0; i < arrayHeight; i++) {
       const row: RGBPixel[] = [];
@@ -76,14 +80,14 @@ export class DigitalImage {
         ];
         row.push(pixel);
       }
-      this.RGBMatrix.push(row);
+      rgbMatrix.push(row);
     }
 
-    return this.RGBMatrix;
+    return rgbMatrix;
   }
 
-  private convertImageToCanva() {
-    const newImgElement = document.getElementById('image') as HTMLImageElement;
+  private convertImageToCanva(elementId = 'image'): RGBImageMatrix {
+    const newImgElement = document.getElementById(elementId) as HTMLImageElement;
 
     const { width, height } = newImgElement;
 
@@ -96,6 +100,6 @@ export class DigitalImage {
     ctx.drawImage(newImgElement, 0, 0);
 
     const { data } = ctx.getImageData(0, 0, width, height);
-    this.convertCanvaArrayToMatrix(data);
+    return this.convertCanvaArrayToMatrix(data);
   }
 } 
