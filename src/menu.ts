@@ -108,6 +108,14 @@ export class PDIMenuBuilder {
           label: 'Threshold',
           click: () => this.apply('threshold'),
         },
+        {
+          label: 'Brilho',
+          click: () => this.apply('brightness')
+        },
+        {
+          label: 'Contraste',
+          click: () => console.log("Contraste")
+        },
       ]
     });
     const mathMorphologyMenuItem = new MenuItem({

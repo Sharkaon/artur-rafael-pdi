@@ -27,7 +27,7 @@
  */
 
 import { DigitalImage, ImageUpdateParams } from './DigitalImage';
-import { grayScale, threshold } from './effects/filters';
+import { grayScale, threshold, brightness } from './effects/filters';
 import { translate } from './effects/geometrical-transformations';
 import { applyFromInputs } from './inputs';
 import { Effect, RGBImageMatrix } from './types';
@@ -63,10 +63,19 @@ const handleTranslate = (matrix: RGBImageMatrix) => {
   }], translate);
 }
 
+const handleBrightness = (matrix: RGBImageMatrix) => {
+  applyFromInputs(digitalImage, [{
+    label: "Brilho",
+    name: "brightness",
+    type: "number"}
+    ], brightness)
+}
+
 const EffectCallbacks: Record<Effect, CallbackFunc> = {
   grayscale: grayScale,
   threshold: handleThreshold,
   translate: handleTranslate,
+  brightness: handleBrightness,
 } as const;
 
 const setImage = (filePath: string, imageElementId: string): HTMLImageElement => {
