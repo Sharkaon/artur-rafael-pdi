@@ -42,4 +42,25 @@ const threshold = (pdiMatrix: RGBImageMatrix, options: {
   };
 }
 
-export { grayScale, threshold };
+const brightness = (pdiMatrix: RGBImageMatrix, options: {
+  brightnessValue: number;
+}): ImageUpdateParams => {
+  const {brightnessValue} = options;
+  pdiMatrix.forEach((row) => {
+    for (let j = 0; j < row.length; j++) {
+      const pixel = row[j];
+      const [Red, Green, Blue, Alpha] = pixel;
+      const adjustedRed =  Math.min(Math.max(1 * Red + brightnessValue, 0), 255);
+      const adjustedGreen =  Math.min(Math.max(1 * Green + brightnessValue, 0), 255);
+      const adjustedBlue =  Math.min(Math.max(1 * Blue + brightnessValue, 0), 255);
+      const adjustedPixel: RGBPixel = [adjustedRed, adjustedGreen, adjustedBlue, FULLY_OPAQUE];
+      row[j] = adjustedPixel;
+    }
+  });
+
+  return {
+    newMatrix: pdiMatrix,
+  };
+}
+
+export { grayScale, threshold, brightness };

@@ -10,7 +10,7 @@ export type RGBLine = RGBPixel[];
 
 export type RGBImageMatrix = RGBLine[];
 
-export type Effect = 'grayscale' | 'threshold' | 'translate';
+export type Effect = 'grayscale' | 'threshold' | 'translate' | 'brightness';
 export type EffectParams =
   | { type: 'grayscale' } // No additional parameters for grayscale
   | { type: 'threshold'; threshold: number } // Threshold effect requires a `threshold` parameter
