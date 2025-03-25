@@ -58,8 +58,7 @@ export class DigitalImage {
     canvas.remove();
 
     this.destinyImage.src = dataUrl;
-    this.RGBMatrix = this.convertImageToCanva('second-image');
-    this.destinyImage = document.getElementById('second-image') as HTMLImageElement;
+    this.RGBMatrix = newMatrix;
   }
 
   private convertCanvaArrayToMatrix(data: Uint8ClampedArray): RGBImageMatrix {
