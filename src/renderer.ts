@@ -37,7 +37,7 @@ console.log('👋 This message is being logged by "renderer.ts", included via Vi
 
 export type CallbackFunc = (matrix: RGBImageMatrix) => ImageUpdateParams | void;
 
-let digitalImage: DigitalImage;
+let digitalImage: DigitalImage = new DigitalImage();
 
 const handleThreshold = (matrix: RGBImageMatrix) => {
   applyFromInputs(digitalImage, [{

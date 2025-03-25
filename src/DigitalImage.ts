@@ -15,7 +15,7 @@ export class DigitalImage {
   public destinyImage: HTMLImageElement;
 
   public constructor() {
-    this.RGBMatrix = this.convertImageToCanva();
+    this.RGBMatrix = this.convertImageToCanva('second-image');
     this.destinyImage = document.getElementById('second-image') as HTMLImageElement;
   }
 
@@ -87,6 +87,7 @@ export class DigitalImage {
 
   private convertImageToCanva(elementId = 'image'): RGBImageMatrix {
     const newImgElement = document.getElementById(elementId) as HTMLImageElement;
+    if (!newImgElement.src) return [];
 
     const { width, height } = newImgElement;
 
