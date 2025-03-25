@@ -40,26 +40,6 @@ const translate = (pdiMatrix: RGBImageMatrix, options: {
   ] as const;
 
   const positionMatrix = multiplyMatrix(TRANSLATE_MATRIX, CURRENT_MATRIX);
-  console.log({ positionMatrix });
-
-    // const matrixAsArray = pdiMatrix.flat(2);
-
-    // const destinyImage = document.getElementById('second-image') as HTMLImageElement;
-    // const { width, height } = destinyImage;
-
-    // const canvas = document.createElement('canvas');
-    // const ctx = canvas.getContext('2d');
-
-    // canvas.width = width + positionMatrix[0];
-    // canvas.height = height + positionMatrix[1];
-
-    // const idata = ctx.createImageData(width, height);
-    // idata.data.set(matrixAsArray);
-    // ctx.putImageData(idata, positionMatrix[0], positionMatrix[1]);
-
-    // const dataUrl = canvas.toDataURL();
-
-    // destinyImage.src = dataUrl;
 
   return {
     newMatrix: pdiMatrix,

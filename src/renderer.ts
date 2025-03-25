@@ -101,7 +101,6 @@ const setImage = (filePath: string, imageElementId: string): HTMLImageElement =>
 });
 
 (window as any).electronAPI.onEffectClick((effect: Effect) => {
-  console.log({ digitalImage })
   if (!digitalImage) {
     console.log("Alert");
   }
