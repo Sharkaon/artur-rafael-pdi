@@ -50,4 +50,34 @@ const translate = (pdiMatrix: RGBImageMatrix, options: {
   }
 }
 
-export { translate };
+const scale = (pdiMatrix: RGBImageMatrix, options: {
+  x: number;
+  y: number;
+}): ImageUpdateParams => {
+  const { x, y } = options;
+  const currX = 0;
+  const currY = 0;
+  const TRANSLATE_MATRIX = [
+    [5, 0, 0],
+    [0, 5, 0],
+    [0, 0, 1],
+  ] as const;
+  const CURRENT_MATRIX = [
+    currX,
+    currY,
+    1,
+  ] as const;
+
+  const positionMatrix = multiplyMatrix(TRANSLATE_MATRIX, CURRENT_MATRIX);
+
+  return {
+    newMatrix: pdiMatrix,
+    position: {
+      x: positionMatrix[0],
+      y: positionMatrix[1],
+    },
+  }
+}
+
+
+export { translate, scale };
