@@ -39,12 +39,8 @@ export type CallbackFunc = (matrix: RGBImageMatrix) => ImageUpdateParams | void;
 
 let digitalImage: DigitalImage = new DigitalImage();
 
-const handleThreshold = (matrix: RGBImageMatrix) => {
+const handleContrast = (matrix: RGBImageMatrix) => {
   applyFromInputs(digitalImage, [{
-    label: 'Brilho',
-    name: 'brightness',
-    type: 'number'
-  }, {
     label: 'Contraste',
     name: 'contrast',
     type: 'number'
@@ -66,14 +62,14 @@ const handleTranslate = (matrix: RGBImageMatrix) => {
 const handleBrightness = (matrix: RGBImageMatrix) => {
   applyFromInputs(digitalImage, [{
     label: "Brilho",
-    name: "brightness",
+    name: "brightnessValue",
     type: "number"}
     ], brightness)
 }
 
 const EffectCallbacks: Record<Effect, CallbackFunc> = {
   grayscale: grayScale,
-  threshold: handleThreshold,
+  threshold: handleContrast,
   translate: handleTranslate,
   brightness: handleBrightness,
 } as const;
