@@ -80,11 +80,11 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Aumentar',
-          click: () => console.log("Aumentar")
+          click: () => this.apply('scale')
         },
         {
           label: 'Diminuir',
-          click: () => console.log("Diminuir")
+          click: () => this.apply('scale')
         },
       ],
     });
