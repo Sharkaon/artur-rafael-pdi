@@ -58,8 +58,8 @@ const scale = (pdiMatrix: RGBImageMatrix, options: {
   const currX = 0;
   const currY = 0;
   const TRANSLATE_MATRIX = [
-    [5, 0, 0],
-    [0, 5, 0],
+    [x, 0, 0],
+    [0, y, 0],
     [0, 0, 1],
   ] as const;
   const CURRENT_MATRIX = [

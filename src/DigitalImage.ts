@@ -21,6 +21,7 @@ export class DigitalImage {
 
   public apply(effectCallback: (matrix: RGBImageMatrix) => ImageUpdateParams | void): void {
     const output = effectCallback(this.RGBMatrix);
+    console.log({ output });
     if (!output) return;
 
     const {
@@ -67,6 +68,7 @@ export class DigitalImage {
 
     const rgbMatrix = [];
 
+    // TODO: ARRUMAR ESTA BOSTA, TODOS OS PIXELS ESTAO NO MESMO ARRAY
     for (let i = 0; i < arrayHeight; i++) {
       const row: RGBPixel[] = [];
       for (let j = 0; j < arrayLength; j++) {

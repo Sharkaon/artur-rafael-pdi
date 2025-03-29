@@ -27,7 +27,7 @@
  */
 
 import { DigitalImage, ImageUpdateParams } from './DigitalImage';
-import { grayScale, threshold, brightness } from './effects/filters';
+import { grayScale, threshold, brightness, filter } from './effects/filters';
 import { translate, scale } from './effects/geometrical-transformations';
 import { applyFromInputs } from './inputs';
 import { Effect, RGBImageMatrix } from './types';
@@ -85,6 +85,7 @@ const EffectCallbacks: Record<Effect, CallbackFunc> = {
   translate: handleTranslate,
   brightness: handleBrightness,
   scale: handleScale,
+  filter: filter,
 } as const;
 
 const setImage = (filePath: string, imageElementId: string): HTMLImageElement => {

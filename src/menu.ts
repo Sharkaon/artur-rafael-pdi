@@ -98,7 +98,7 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Passa Baixa',
-          click: () => console.log("Passa Baixa")
+          click: () => this.apply('filter'),
         },
         {
           label: 'Passa Alta',
@@ -143,6 +143,24 @@ export class PDIMenuBuilder {
     const featureExtractionMenuItem = new MenuItem({
       label: "DESAFIO"
     })
-    return [fileMenuItem, geometricTransformationsMenuItem, filterMenuItem, mathMorphologyMenuItem, featureExtractionMenuItem]
+
+    const viewMenuItem = new MenuItem({
+      label: "Visualização",
+      submenu: [
+        {
+          label: "Zoom In",
+          role: 'zoomIn'
+        },
+        {
+          label: "Zoom Out",
+          role: 'zoomOut'
+        },
+        {
+          label: "Reset Zoom",
+          role: 'resetZoom'
+        }
+      ]
+    })
+    return [fileMenuItem, geometricTransformationsMenuItem, filterMenuItem, mathMorphologyMenuItem, featureExtractionMenuItem, viewMenuItem]
   }
 }
