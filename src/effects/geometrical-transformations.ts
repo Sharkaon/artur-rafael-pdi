@@ -57,7 +57,7 @@ const scale = (pdiMatrix: RGBImageMatrix, options: {
   const { x, y } = options;
   const currX = 0;
   const currY = 0;
-  const TRANSLATE_MATRIX = [
+  const SCALE_MATRIX = [
     [x, 0, 0],
     [0, y, 0],
     [0, 0, 1],
@@ -68,8 +68,7 @@ const scale = (pdiMatrix: RGBImageMatrix, options: {
     1,
   ] as const;
 
-  const positionMatrix = multiplyMatrix(TRANSLATE_MATRIX, CURRENT_MATRIX);
-
+  const positionMatrix = multiplyMatrix(SCALE_MATRIX, CURRENT_MATRIX);
   return {
     newMatrix: pdiMatrix,
     position: {
