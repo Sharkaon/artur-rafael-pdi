@@ -62,17 +62,17 @@ export class DigitalImage {
     this.RGBMatrix = newMatrix;
   }
 
-  private convertCanvaArrayToMatrix(data: Uint8ClampedArray): RGBImageMatrix {
-    const arrayLength = data.length / 4; // numero de pixeis por linha
-    const arrayHeight = data.length / (4 * arrayLength); // numero de linhas
-
+  private convertCanvaArrayToMatrix(data: Uint8ClampedArray, imageDimensions: {
+    width: number;
+    height: number;
+  }): RGBImageMatrix {
     const rgbMatrix = [];
 
     // TODO: ARRUMAR ESTA BOSTA, TODOS OS PIXELS ESTAO NO MESMO ARRAY
-    for (let i = 0; i < arrayHeight; i++) {
+    for (let i = 0; i < imageDimensions.height; i++) {
       const row: RGBPixel[] = [];
-      for (let j = 0; j < arrayLength; j++) {
-        const index = (i * arrayLength + j) * 4; // Calculate the index in the Uint8ClampedArray
+      for (let j = 0; j < imageDimensions.width; j++) {
+        const index = (i * imageDimensions.height + j) * 4; // Calculate the index in the Uint8ClampedArray
         const pixel: RGBPixel = [
           data[index],     // Red
           data[index + 1], // Green
@@ -102,6 +102,9 @@ export class DigitalImage {
     ctx.drawImage(newImgElement, 0, 0);
 
     const { data } = ctx.getImageData(0, 0, width, height);
-    return this.convertCanvaArrayToMatrix(data);
+    return this.convertCanvaArrayToMatrix(data, {
+      height,
+      width,
+    });
   }
 } 
