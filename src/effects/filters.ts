@@ -70,7 +70,6 @@ const applyMedianMask = (mask: [
   const pixelList = mask.flat();
   const firstChannelList = pixelList.map((p) => p[0]);
   const sortedPixelList = firstChannelList.sort();
-  console.log({ sortedPixelList });
   const halfIndex = Math.floor(sortedPixelList.length / 2);
 
   return [sortedPixelList[halfIndex], sortedPixelList[halfIndex], sortedPixelList[halfIndex], FULLY_OPAQUE];
@@ -79,9 +78,7 @@ const applyMedianMask = (mask: [
 const filter = (matrix: RGBImageMatrix): ImageUpdateParams => {
   console.log({ matrix });
   for (let i = 1; i < matrix[0].length - 1; i ++) {
-    console.log({ i });
     for (let j = 1; j < matrix[i].length - 1; j++) {
-      console.log({ j });
       const adjustedPixel = applyMedianMask([
         [matrix[i-1][j-1], matrix[i-1][j], matrix[i-1][j+1]],
         [matrix[i][j-1], matrix[i][j], matrix[i][j+1]],
