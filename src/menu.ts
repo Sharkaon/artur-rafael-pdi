@@ -76,7 +76,7 @@ export class PDIMenuBuilder {
         },
         {
             label: 'Espelhar',
-            click: () => console.log("Espelhar")
+            click: () => this.apply('mirror')
         },
         {
           label: 'Aumentar',

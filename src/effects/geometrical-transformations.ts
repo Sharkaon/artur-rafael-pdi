@@ -62,7 +62,6 @@ const scale = (matrix: RGBImageMatrix, options: {
   };
 }
 
-
 const translate = (pdiMatrix: RGBImageMatrix, options: {
   x: number;
   y: number;
@@ -92,33 +91,27 @@ const translate = (pdiMatrix: RGBImageMatrix, options: {
   }
 }
 
-// const scale = (pdiMatrix: RGBImageMatrix, options: {
-//   x: number;
-//   y: number;
-// }): ImageUpdateParams => {
-//   const { x, y } = options;
-//   const currX = 0;
-//   const currY = 0;
-//   const SCALE_MATRIX = [
-//     [x, 0, 0],
-//     [0, y, 0],
-//     [0, 0, 1],
-//   ] as const;
-//   const CURRENT_MATRIX = [
-//     currX,
-//     currY,
-//     1,
-//   ] as const;
 
-//   const positionMatrix = multiplyMatrix(SCALE_MATRIX, CURRENT_MATRIX);
-//   return {
-//     newMatrix: pdiMatrix,
-//     position: {
-//       x: positionMatrix[0],
-//       y: positionMatrix[1],
-//     },
-//   }
-// }
+const mirror = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
+  console.log("Executing mirror");
+  const height = pdiMatrix.length;
+  const width = pdiMatrix[0].length;
+
+  const newMatrix: RGBImageMatrix = [];
+
+  for(let i = 0; i < height -1; i++){
+    console.log(height);
+    const newRow: RGBPixel[] = [];
+    for(let j = width - 1; j > 0; j--){
+      newRow.push(pdiMatrix[i][j]);
+    }
+    newMatrix.push(newRow);
+  }
+
+  return {
+    newMatrix: newMatrix,
+  }
+}
 
 
-export { translate, scale };
+export { translate, scale, mirror };
