@@ -17,10 +17,30 @@ const grayScale = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
   };
 }
 
+const threshold = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
+  const THRESHOLD_LIMIT = 100;
+
+  pdiMatrix.forEach((row) => {
+    for(let j = 0; j < row.length; j++) {
+
+      const pixel = row[j]
+      const [Gray, _B, _G, Alpha] = pixel;
+      const newPixelValue = Gray > THRESHOLD_LIMIT ? 255 : 0;
+
+      row[j] = [newPixelValue, newPixelValue, newPixelValue, Alpha];
+    }
+  });
+
+  return {
+    newMatrix: pdiMatrix,
+  }
+}
+
 const contrast = (pdiMatrix: RGBImageMatrix, options: {
   contrast: number;
 }): ImageUpdateParams => {
   const { contrast } = options;
+
   pdiMatrix.forEach((row) => {
     for(let j = 0; j < row.length; j++) {
 
@@ -91,4 +111,4 @@ const filter = (matrix: RGBImageMatrix): ImageUpdateParams => {
   }
 }
 
-export { grayScale, contrast as contrast, brightness, filter };
+export { grayScale, contrast, threshold, brightness, filter };
