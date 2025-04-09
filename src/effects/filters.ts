@@ -76,7 +76,6 @@ const applyMedianMask = (mask: [
 }
 
 const filter = (matrix: RGBImageMatrix): ImageUpdateParams => {
-  console.log({ matrix });
   for (let i = 1; i < matrix[0].length - 1; i ++) {
     for (let j = 1; j < matrix[i].length - 1; j++) {
       const adjustedPixel = applyMedianMask([

@@ -21,7 +21,6 @@ export class DigitalImage {
 
   public apply(effectCallback: (matrix: RGBImageMatrix) => ImageUpdateParams | void): void {
     const output = effectCallback(this.RGBMatrix);
-    console.log({ output });
     if (!output) return;
 
     const {

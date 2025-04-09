@@ -36,7 +36,6 @@ const createWindow = () => {
 };
 
 ipcMain.on("chooseFile", (event, arg) => {
-  console.log("Enviado");
   const result = dialog.showOpenDialog({
     properties: ["openFile"],
     filters: [{ name: "Images", extensions: ["png","jpg","jpeg"] }]
