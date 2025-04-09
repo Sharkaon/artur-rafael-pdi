@@ -93,4 +93,4 @@ const filter = (matrix: RGBImageMatrix): ImageUpdateParams => {
   }
 }
 
-export { grayScale, contrast as threshold, brightness, filter };
+export { grayScale, contrast as contrast, brightness, filter };

@@ -106,7 +106,7 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Threshold',
-          click: () => this.apply('threshold'),
+          click: () => console.log("Threshold")
         },
         {
           label: 'Brilho',
@@ -114,7 +114,7 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Contraste',
-          click: () => console.log("Contraste")
+          click: () => this.apply('contrast')
         },
       ]
     });
