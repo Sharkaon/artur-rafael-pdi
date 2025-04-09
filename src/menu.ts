@@ -106,15 +106,15 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Threshold',
-          click: () => console.log("Threshold")
+          click: () => this.apply('threshold'),
         },
         {
           label: 'Brilho',
-          click: () => this.apply('brightness')
+          click: () => this.apply('brightness'),
         },
         {
           label: 'Contraste',
-          click: () => this.apply('contrast')
+          click: () => this.apply('contrast'),
         },
       ]
     });
