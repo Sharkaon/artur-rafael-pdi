@@ -1,6 +1,5 @@
 import { ImageUpdateParams } from "../DigitalImage";
 import type { AlphaChannel, RGBImageMatrix, RGBPixel } from "../types";
-
 const FULLY_OPAQUE: AlphaChannel = 255;
 
 const grayScale = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
@@ -13,7 +12,6 @@ const grayScale = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
       row[j] = grayPixel;
     }
   });
-
   return {
     newMatrix: pdiMatrix,
   };
