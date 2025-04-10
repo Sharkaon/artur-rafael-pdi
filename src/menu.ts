@@ -1,4 +1,5 @@
 import { BrowserWindow, dialog, Menu, MenuItem } from "electron";
+import { Effect } from "./types";
 
 export class PDIMenuBuilder {
   private readonly mainWindow: BrowserWindow;
@@ -35,7 +36,7 @@ export class PDIMenuBuilder {
     this.mainWindow.webContents.send('file-selected', filePath);
   }
 
-  private apply(effect: string): void {
+  private apply(effect: Effect): void {
     this.mainWindow.webContents.send('apply', effect)
   }
 
@@ -102,7 +103,7 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Passa Alta',
-          click: () => console.log("Passa Alta")
+          click: () => this.apply('borders'),
         },
         {
           label: 'Threshold',

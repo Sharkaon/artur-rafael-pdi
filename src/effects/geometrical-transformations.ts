@@ -93,14 +93,12 @@ const translate = (pdiMatrix: RGBImageMatrix, options: {
 
 
 const mirror = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
-  console.log("Executing mirror");
   const height = pdiMatrix.length;
   const width = pdiMatrix[0].length;
 
   const newMatrix: RGBImageMatrix = [];
 
   for(let i = 0; i < height -1; i++){
-    console.log(height);
     const newRow: RGBPixel[] = [];
     for(let j = width - 1; j > 0; j--){
       newRow.push(pdiMatrix[i][j]);

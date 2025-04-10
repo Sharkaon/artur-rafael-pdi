@@ -18,7 +18,7 @@ const grayScale = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
 }
 
 const threshold = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
-  const THRESHOLD_LIMIT = 100;
+  const THRESHOLD_LIMIT = 100 as const;
 
   pdiMatrix.forEach((row) => {
     for(let j = 0; j < row.length; j++) {
@@ -93,9 +93,56 @@ const applyMedianMask = (mask: [
   return [sortedPixelList[halfIndex], sortedPixelList[halfIndex], sortedPixelList[halfIndex], FULLY_OPAQUE];
 }
 
+// Passa alta
+const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
+  const THRESHOLD_LIMIT = 100 as const;
+
+  const X_KERNEL = [
+    [1, 0, -1],
+    [2, 0, -2],
+    [1, 0, -1],
+  ] as const;
+
+  const Y_KERNEL = [
+    [1, 2, 1],
+    [0, 0, 0],
+    [-1, -2, -1],
+  ] as const;
+
+  for (let y = 1; y < matrix.length - 1; y++) {
+    for (let x = 1; matrix[y] && x < matrix[y].length - 1; x++) {
+      let xGradient = 0;
+      let yGradient = 0;
+
+      for (let i = 0; i < X_KERNEL.length; i++) {
+        if (!matrix[x + (i-1)]) continue;
+
+        for (let j = 0; j < X_KERNEL[0].length; j++) {
+          const pixel = matrix[x + (i-1)][y + (j-1)];
+          xGradient += pixel[0] * X_KERNEL[i][j];
+          yGradient += pixel[0] * Y_KERNEL[i][j];
+        }
+      }
+
+      const gradient = Math.sqrt(Math.pow(xGradient, 2) + Math.pow(yGradient, 2));
+      const newPixelValue = gradient > THRESHOLD_LIMIT ? 255 : 0;
+
+      matrix[y][x] = [newPixelValue, newPixelValue, newPixelValue, matrix[y][x][3]];
+    }
+  }
+
+  return {
+    newMatrix: matrix,
+  }
+}
+
+// Passa baixa
 const filter = (matrix: RGBImageMatrix): ImageUpdateParams => {
+  console.log({ matrix });
   for (let i = 1; i < matrix[0].length - 1; i ++) {
-    for (let j = 1; j < matrix[i].length - 1; j++) {
+    for (let j = 1; matrix[i] && j < matrix[i].length - 1; j++) {
+      if (!matrix[i-1] || !matrix[i] || !matrix[i+1]) continue;
+
       const adjustedPixel = applyMedianMask([
         [matrix[i-1][j-1], matrix[i-1][j], matrix[i-1][j+1]],
         [matrix[i][j-1], matrix[i][j], matrix[i][j+1]],
@@ -106,9 +153,11 @@ const filter = (matrix: RGBImageMatrix): ImageUpdateParams => {
     }
   }
 
+  console.log({ matrix });
+
   return {
     newMatrix: matrix,
   }
 }
 
-export { grayScale, contrast, threshold, brightness, filter };
+export { grayScale, contrast, threshold, brightness, filter, borders };

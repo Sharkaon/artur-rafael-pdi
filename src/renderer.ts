@@ -27,7 +27,7 @@
  */
 
 import { DigitalImage, ImageUpdateParams } from './DigitalImage';
-import { grayScale, contrast, brightness, filter, threshold } from './effects/filters';
+import { grayScale, contrast, brightness, filter, threshold, borders } from './effects/filters';
 import { translate, scale, mirror } from './effects/geometrical-transformations';
 import { applyFromInputs } from './inputs';
 import { Effect, RGBImageMatrix } from './types';
@@ -87,6 +87,7 @@ const EffectCallbacks: Record<Effect, CallbackFunc> = {
   brightness: handleBrightness,
   scale: handleScale,
   filter: filter,
+  borders: borders,
   mirror: mirror,
 } as const;
 
