@@ -11,9 +11,19 @@ body{
 
 #image{
     margin: 10px;
-    display: flex;
+    float: left;
 }
 #second-image{
     margin: 10px;
+    float: left;
+}
+
+#content {
     display: flex;
+    flex-direction: column;
+}
+
+#inputs {
+    display: flex;
+    flex-direction: column;
 }
