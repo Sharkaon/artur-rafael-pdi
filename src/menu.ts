@@ -73,7 +73,7 @@ export class PDIMenuBuilder {
         },
         {
             label: 'Rotacionar',
-            click: () => console.log("Rotacionar")
+            click: () => this.apply('rotate'),
         },
         {
             label: 'Espelhar',

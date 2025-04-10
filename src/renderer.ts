@@ -28,7 +28,7 @@
 
 import { DigitalImage, ImageUpdateParams } from './DigitalImage';
 import { grayScale, contrast, brightness, filter, threshold, borders } from './effects/filters';
-import { translate, scale, mirror } from './effects/geometrical-transformations';
+import { translate, scale, mirror, rotate } from './effects/geometrical-transformations';
 import { applyFromInputs } from './inputs';
 import { Effect, RGBImageMatrix } from './types';
 import './index.css';
@@ -78,6 +78,14 @@ const handleBrightness = (matrix: RGBImageMatrix) => {
     type: "number"}
     ], brightness)
 }
+const handleRotate = (matrix: RGBImageMatrix) => {
+  applyFromInputs(digitalImage, [{
+    label: "Angulo",
+    name: "angular",
+    type: "number"}
+    ], rotate)
+}
+
 
 const EffectCallbacks: Record<Effect, CallbackFunc> = {
   grayscale: grayScale,
@@ -89,6 +97,7 @@ const EffectCallbacks: Record<Effect, CallbackFunc> = {
   filter: filter,
   borders: borders,
   mirror: mirror,
+  rotate: handleRotate
 } as const;
 
 const setImage = (filePath: string, imageElementId: string): HTMLImageElement => {

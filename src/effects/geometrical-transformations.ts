@@ -91,7 +91,6 @@ const translate = (pdiMatrix: RGBImageMatrix, options: {
   }
 }
 
-
 const mirror = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
   const height = pdiMatrix.length;
   const width = pdiMatrix[0].length;
@@ -111,5 +110,46 @@ const mirror = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
   }
 }
 
+const rotate = (pdiMatrix: RGBImageMatrix, options: {
+  angular: number;
+}): ImageUpdateParams => {
+  const { angular } = options;
+  const ROTATE_MATRIX = [
+    [Math.cos(angular), (Math.sin(angular)) * -1, 0],
+    [Math.sin(angular),  Math.cos(angular), 0],
+    [0, 0, 1],
+  ] as const;
+  const height = pdiMatrix.length;
+  const width = pdiMatrix[0].length;
 
-export { translate, scale, mirror };
+  const newMatrix: RGBImageMatrix = [];
+
+  for(let i = height - 1; i > 0; i--){
+    const newRow: RGBPixel[] = [];
+    for(let j = width - 1; j > 0; j--){
+      let currX = i;
+      let currY = j;
+      const CURRENT_MATRIX = [
+        currX,
+        currY,
+        1,
+      ] as const;
+      let positionMatrix = multiplyMatrix(ROTATE_MATRIX, CURRENT_MATRIX);
+      console.log(Math.ceil(positionMatrix[0]) + " " + Math.ceil(positionMatrix[0]));
+      if(Math.ceil(positionMatrix[0]) < 0 || Math.ceil(positionMatrix[1]) < 0 || 
+         Math.ceil(positionMatrix[0]) >= pdiMatrix.length || Math.ceil(positionMatrix[1]) >= pdiMatrix[0].length){
+          newRow.push([0,0,0,255]);
+      }else{
+        newRow.push(pdiMatrix[Math.ceil(positionMatrix[0])][Math.ceil(positionMatrix[1])]);
+      }
+      //newRow.push([255,255,255,255]);
+    }
+    newMatrix.push(newRow);
+  }
+  return {
+    newMatrix: newMatrix,
+  }
+}
+
+
+export { translate, scale, mirror, rotate };

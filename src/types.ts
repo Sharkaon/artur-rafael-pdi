@@ -19,8 +19,10 @@ export type Effect =
   | 'filter'
   | 'threshold'
   | 'borders'
-  | 'mirror';
+  | 'mirror'
+  | 'rotate';
 
 export type EffectParams =
   | { type: 'grayscale' } // No additional parameters for grayscale
   | { type: 'threshold'; threshold: number } // Threshold effect requires a `threshold` parameter
+  | { type : 'rotate'; angular: number}
