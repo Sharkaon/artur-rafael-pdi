@@ -153,8 +153,6 @@ const filter = (matrix: RGBImageMatrix): ImageUpdateParams => {
     }
   }
 
-  console.log({ matrix });
-
   return {
     newMatrix: matrix,
   }

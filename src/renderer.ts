@@ -91,6 +91,7 @@ const handleBrightness = (matrix: RGBImageMatrix) => {
     type: "number"}
     ], brightness)
 }
+
 const handleRotate = (matrix: RGBImageMatrix) => {
   applyFromInputs(digitalImage, [{
     label: "Angulo",

@@ -15,6 +15,7 @@ export const applyFromInputs = (
   callback: Callback,
 ) => {
   const divForInputs = document.getElementById('inputs');
+  const inputElements: HTMLInputElement[] = [];
 
   inputs.forEach((input) => {
     const inputEl = document.createElement('input');
@@ -23,6 +24,8 @@ export const applyFromInputs = (
     if (input.type) inputEl.setAttribute('type', input.type);
 
     divForInputs.appendChild(inputEl);
+
+    inputElements.push(inputEl);
   });
 
   const submitButton = document.createElement('button');
@@ -35,6 +38,11 @@ export const applyFromInputs = (
     });
 
     digitalImage.apply((matrix: RGBImageMatrix) => callback(matrix, params));
+
+    inputElements.forEach((inputEl) => {
+      inputEl.remove();
+    });
+    submitButton.remove();
   }
   submitButton.onclick = applyEffect;
   divForInputs.appendChild(submitButton);
