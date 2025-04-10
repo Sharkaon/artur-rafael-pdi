@@ -28,7 +28,7 @@
 
 import { DigitalImage, ImageUpdateParams } from './DigitalImage';
 import { grayScale, contrast, brightness, filter, threshold, borders } from './effects/filters';
-import { translate, scale, mirror, rotate } from './effects/geometrical-transformations';
+import { translate, increase, mirror, reduce, rotate } from './effects/geometrical-transformations';
 import { applyFromInputs } from './inputs';
 import { Effect, RGBImageMatrix } from './types';
 import './index.css';
@@ -38,6 +38,7 @@ console.log('👋 This message is being logged by "renderer.ts", included via Vi
 export type CallbackFunc = (matrix: RGBImageMatrix) => ImageUpdateParams | void;
 
 let digitalImage: DigitalImage = new DigitalImage();
+
 
 const handleContrast = (matrix: RGBImageMatrix) => {
   applyFromInputs(digitalImage, [{
@@ -59,16 +60,28 @@ const handleTranslate = (matrix: RGBImageMatrix) => {
   }], translate);
 }
 
-const handleScale = (matrix: RGBImageMatrix) => {
+const handleIncrease = (matrix: RGBImageMatrix) => {
   applyFromInputs(digitalImage, [{
-    label: "X",
+    label: "Aumentar X em",
     name: 'x',
     type: "number"
   }, {
-    label: "Y",
+    label: "Aumentar Y em",
     name: "y",
     type: "number"
-  }], scale);
+  }], increase);
+}
+
+const handleReduce = (matrix: RGBImageMatrix) => {
+  applyFromInputs(digitalImage, [{
+    label: "Diminui X em",
+    name: 'x',
+    type: "number"
+  }, {
+    label: "Diminui Y em",
+    name: "y",
+    type: "number"
+  }], reduce);
 }
 
 const handleBrightness = (matrix: RGBImageMatrix) => {
@@ -93,11 +106,12 @@ const EffectCallbacks: Record<Effect, CallbackFunc> = {
   contrast: handleContrast,
   translate: handleTranslate,
   brightness: handleBrightness,
-  scale: handleScale,
+  increase: handleIncrease,
+  reduce: handleReduce,
+  rotate: handleRotate,
   filter: filter,
   borders: borders,
   mirror: mirror,
-  rotate: handleRotate
 } as const;
 
 const setImage = (filePath: string, imageElementId: string): HTMLImageElement => {
