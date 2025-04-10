@@ -19,6 +19,7 @@ export const applyFromInputs = (
   inputs.forEach((input) => {
     const inputEl = document.createElement('input');
     inputEl.setAttribute('id', `${input.name}-input`);
+    inputEl.setAttribute('placeholder', `${input.label}`);
     if (input.type) inputEl.setAttribute('type', input.type);
 
     divForInputs.appendChild(inputEl);

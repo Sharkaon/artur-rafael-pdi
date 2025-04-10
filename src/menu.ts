@@ -73,7 +73,7 @@ export class PDIMenuBuilder {
         },
         {
             label: 'Rotacionar',
-            click: () => console.log("Rotacionar")
+            click: () => this.apply('rotate'),
         },
         {
             label: 'Espelhar',
@@ -81,11 +81,11 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Aumentar',
-          click: () => this.apply('scale')
+          click: () => this.apply('increase')
         },
         {
           label: 'Diminuir',
-          click: () => this.apply('scale')
+          click: () => this.apply('reduce')
         },
       ],
     });

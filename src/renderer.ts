@@ -28,7 +28,7 @@
 
 import { DigitalImage, ImageUpdateParams } from './DigitalImage';
 import { grayScale, contrast, brightness, filter, threshold, borders } from './effects/filters';
-import { translate, scale, mirror } from './effects/geometrical-transformations';
+import { translate, increase, mirror, reduce } from './effects/geometrical-transformations';
 import { applyFromInputs } from './inputs';
 import { Effect, RGBImageMatrix } from './types';
 import './index.css';
@@ -38,6 +38,33 @@ console.log('👋 This message is being logged by "renderer.ts", included via Vi
 export type CallbackFunc = (matrix: RGBImageMatrix) => ImageUpdateParams | void;
 
 let digitalImage: DigitalImage = new DigitalImage();
+
+const handleRotate = (matrix: RGBImageMatrix) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+  
+    // Resize the canvas according to the image dimensions
+    canvas.width = matrix[0].length;
+    canvas.height = matrix.length;
+  
+    const matrixAsArray = matrix.flat().reduce((acc, pixel) => {
+      acc.push(...pixel); // Flatten each pixel (R, G, B, A)
+      return acc;
+    }, [] as number[]);
+
+    ctx.rotate(45);
+  
+    const idata = ctx.createImageData(canvas.width, canvas.height);
+    idata.data.set(matrixAsArray); // Set the pixel data in the canvas imageData
+  
+    // Put the updated image data onto the canvas
+    ctx.putImageData(idata, 0, 0);
+  
+    // Convert canvas to data URL and update image source
+    const dataUrl = canvas.toDataURL();
+
+    digitalImage.destinyImage.src = dataUrl;
+}
 
 const handleContrast = (matrix: RGBImageMatrix) => {
   applyFromInputs(digitalImage, [{
@@ -59,16 +86,28 @@ const handleTranslate = (matrix: RGBImageMatrix) => {
   }], translate);
 }
 
-const handleScale = (matrix: RGBImageMatrix) => {
+const handleIncrease = (matrix: RGBImageMatrix) => {
   applyFromInputs(digitalImage, [{
-    label: "X",
+    label: "Aumentar X em",
     name: 'x',
     type: "number"
   }, {
-    label: "Y",
+    label: "Aumentar Y em",
     name: "y",
     type: "number"
-  }], scale);
+  }], increase);
+}
+
+const handleReduce = (matrix: RGBImageMatrix) => {
+  applyFromInputs(digitalImage, [{
+    label: "Diminui X em",
+    name: 'x',
+    type: "number"
+  }, {
+    label: "Diminui Y em",
+    name: "y",
+    type: "number"
+  }], reduce);
 }
 
 const handleBrightness = (matrix: RGBImageMatrix) => {
@@ -85,7 +124,9 @@ const EffectCallbacks: Record<Effect, CallbackFunc> = {
   contrast: handleContrast,
   translate: handleTranslate,
   brightness: handleBrightness,
-  scale: handleScale,
+  increase: handleIncrease,
+  reduce: handleReduce,
+  rotate: handleRotate,
   filter: filter,
   borders: borders,
   mirror: mirror,

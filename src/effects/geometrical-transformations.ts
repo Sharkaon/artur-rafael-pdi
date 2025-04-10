@@ -23,11 +23,14 @@ const multiplyMatrix = (operationMatrix: OperationMatrix, originMatrix: Placemen
 
 const nearestNeighborInterpolation = (
   originalMatrix: RGBImageMatrix, 
-  newWidth: number, 
-  newHeight: number
+  widthToChange: number, 
+  heightToChange: number
 ): RGBImageMatrix => {
   const originalHeight = originalMatrix.length;
   const originalWidth = originalMatrix[0].length;
+
+  const newHeight = heightToChange + originalHeight;
+  const newWidth = widthToChange + originalHeight;
 
   // Create a new matrix with the scaled size
   const newMatrix: RGBImageMatrix = [];
@@ -47,7 +50,7 @@ const nearestNeighborInterpolation = (
 
   return newMatrix;
 }
-const scale = (matrix: RGBImageMatrix, options: {
+const increase = (matrix: RGBImageMatrix, options: {
   x: number;
   y: number;
 }): ImageUpdateParams => {
@@ -56,6 +59,20 @@ const scale = (matrix: RGBImageMatrix, options: {
   
   // First, apply nearest-neighbor interpolation to scale the image
   const scaledMatrix = nearestNeighborInterpolation(matrix, x, y);
+
+  return {
+    newMatrix: scaledMatrix,
+  };
+}
+
+const reduce = (matrix: RGBImageMatrix, options: {
+  x: number;
+  y: number;
+}): ImageUpdateParams => {
+  const {x, y} = options;
+  
+  // First, apply nearest-neighbor interpolation to scale the image
+  const scaledMatrix = nearestNeighborInterpolation(matrix, x * -1, y * -1);
 
   return {
     newMatrix: scaledMatrix,
@@ -112,4 +129,4 @@ const mirror = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
 }
 
 
-export { translate, scale, mirror };
+export { translate, increase, reduce, mirror };
