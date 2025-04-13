@@ -100,6 +100,14 @@ const handleRotate = (matrix: RGBImageMatrix) => {
     ], rotate)
 }
 
+// const handleMirror = (matrix: RGBImageMatrix) => {
+//   applyFromInputs(digitalImage, [{
+//     label: 'vertical',
+//     name: 'vertical',
+//     type: 'radio'
+//   }], mirror);
+// }
+
 
 const EffectCallbacks: Record<Effect, CallbackFunc> = {
   grayscale: grayScale,

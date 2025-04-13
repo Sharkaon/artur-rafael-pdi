@@ -109,18 +109,29 @@ const translate = (pdiMatrix: RGBImageMatrix, options: {
 }
 
 const mirror = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
+  const horizontal = true;
   const height = pdiMatrix.length;
   const width = pdiMatrix[0].length;
 
   const newMatrix: RGBImageMatrix = [];
 
-  for(let i = 0; i < height -1; i++){
-    const newRow: RGBPixel[] = [];
-    for(let j = width - 1; j > 0; j--){
-      newRow.push(pdiMatrix[i][j]);
+  if(horizontal){
+    for(let i = 0; i < height -1; i++){
+      const newRow: RGBPixel[] = [];
+      for(let j = width - 1; j > 0; j--){
+        newRow.push(pdiMatrix[i][j]);
+      }
+      newMatrix.push(newRow);
     }
-    newMatrix.push(newRow);
-  }
+  }else{
+      for(let i = height - 1; i > 0 -1; i--){
+        const newRow: RGBPixel[] = [];
+        for(let j = 0; j < width - 1; j++){
+          newRow.push(pdiMatrix[i][j]);
+        }
+        newMatrix.push(newRow);
+      }
+    }
 
   return {
     newMatrix: newMatrix,
@@ -155,7 +166,7 @@ const rotate = (pdiMatrix: RGBImageMatrix, options: {
       //retorna a posição onde x e y devem ir
       const [rotatedX, rotatedY] = multiplyMatrix(ROTATE_MATRIX, [xRel, yRel, 1]);
       
-      //localização do pixel (da matriz) que irá para o pixel X e Y
+      //localização do pixel (da matriz) que irá para o pixel X e Y (e converte de volta para ficar em relação a 0,0)
       const origX = Math.round(rotatedX + centerX);
       const origY = Math.round(rotatedY + centerY);
       
