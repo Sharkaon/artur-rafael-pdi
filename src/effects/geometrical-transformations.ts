@@ -126,45 +126,52 @@ const mirror = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
     newMatrix: newMatrix,
   }
 }
+
 const rotate = (pdiMatrix: RGBImageMatrix, options: {
   angular: number;
 }): ImageUpdateParams => {
   const { angular } = options;
+  const radians = angular * (Math.PI / 180);
   const ROTATE_MATRIX = [
-    [Math.cos(angular), (Math.sin(angular)) * -1, 0],
-    [Math.sin(angular),  Math.cos(angular), 0],
+    [Math.cos(radians), (Math.sin(radians)) * -1, 0],
+    [Math.sin(radians), Math.cos(radians), 0],
     [0, 0, 1],
   ] as const;
+  
   const height = pdiMatrix.length;
   const width = pdiMatrix[0].length;
-
+  const centerX = width / 2;
+  const centerY = height / 2;
+  
   const newMatrix: RGBImageMatrix = [];
 
-  for(let i = height - 1; i > 0; i--){
+  for(let y = 0; y < height; y++) {
     const newRow: RGBPixel[] = [];
-    for(let j = width - 1; j > 0; j--){
-      let currX = i;
-      let currY = j;
-      const CURRENT_MATRIX = [
-        currX,
-        currY,
-        1,
-      ] as const;
-      let positionMatrix = multiplyMatrix(ROTATE_MATRIX, CURRENT_MATRIX);
-      console.log(Math.ceil(positionMatrix[0]) + " " + Math.ceil(positionMatrix[0]));
-      if(Math.ceil(positionMatrix[0]) < 0 || Math.ceil(positionMatrix[1]) < 0 || 
-         Math.ceil(positionMatrix[0]) >= pdiMatrix.length || Math.ceil(positionMatrix[1]) >= pdiMatrix[0].length){
-          newRow.push([0,0,0,255]);
-      }else{
-        newRow.push(pdiMatrix[Math.ceil(positionMatrix[0])][Math.ceil(positionMatrix[1])]);
+    for(let x = 0; x < width; x++) {
+      //posição de x e y em relação ao centro (usado para girar com base no meio, ao invés de rodar do 0,0 da imagem)
+      const xRel = x - centerX;
+      const yRel = y - centerY;
+      
+      //retorna a posição onde x e y devem ir
+      const [rotatedX, rotatedY] = multiplyMatrix(ROTATE_MATRIX, [xRel, yRel, 1]);
+      
+      //localização do pixel (da matriz) que irá para o pixel X e Y
+      const origX = Math.round(rotatedX + centerX);
+      const origY = Math.round(rotatedY + centerY);
+      
+      //verifica se o pixel procurado está dentro dos limites da matriz
+      if(origX >= 0 && origX < width && origY >= 0 && origY < height) {
+        newRow.push(pdiMatrix[origY][origX]);
+      } else {
+        newRow.push([0, 0, 0, 255]);
       }
-      //newRow.push([255,255,255,255]);
     }
     newMatrix.push(newRow);
   }
+  
   return {
     newMatrix: newMatrix,
-  }
+  };
 }
 
 export { translate, increase, mirror, reduce, rotate };
