@@ -129,7 +129,7 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Erosão',
-          click: () => console.log("Erosão")
+          click: () => this.apply('erosion')
         },
         {
           label: 'Abertura',
