@@ -125,7 +125,7 @@ export class PDIMenuBuilder {
       [
         {
           label: 'Dilatação',
-          click: () => console.log("Dilatação")
+          click: () => this.apply('dilatation')
         },
         {
           label: 'Erosão',

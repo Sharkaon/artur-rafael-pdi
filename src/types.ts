@@ -22,7 +22,8 @@ export type Effect =
   | 'threshold'
   | 'borders'
   | 'mirror'
-  | 'rotate';
+  | 'rotate'
+  | 'dilatation';
 
 export type EffectParams =
   | { type: 'grayscale' } // No additional parameters for grayscale
