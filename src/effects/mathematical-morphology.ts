@@ -18,11 +18,11 @@ const dilatation = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
             const pixelMeio = pdiMatrix[y][x];      // meio
             const pixelDir = pdiMatrix[y][x+1];     // direita
             const pixelBaixo = pdiMatrix[y+1][x];   // baixo
-            const structedElement = [pixelCima, pixelEsq, pixelMeio, pixelDir, pixelBaixo]
+            const structedElement = [pixelCima, pixelEsq, pixelMeio, pixelDir, pixelBaixo] as const;
 
             //talvez fazer uma arrowFunction para isso
             const processedPixels: RGBPixel[] = [];
-            for(let i = 0; i < 5; i++){
+            for(let i = 0; i < structedElement.length; i++){
                 const [Red, Green, Blue, _] = structedElement[i];
                 const adjustedRed = Red + 10;
                 const adjustedGreen = Green + 10;

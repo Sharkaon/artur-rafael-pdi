@@ -27,7 +27,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   const menuBuilder = new PDIMenuBuilder(mainWindow);
   const menu = menuBuilder.addMenuItems().finish();

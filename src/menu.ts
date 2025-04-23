@@ -52,6 +52,10 @@ export class PDIMenuBuilder {
     this.mainWindow.webContents.send('apply', effect)
   }
 
+  private save(): void {
+    this.mainWindow.webContents.send('save');
+  }
+
   private getMenuItems = (): MenuItem[] => {
     const fileMenuItem = new MenuItem({
       label: "Arquivo",
@@ -63,7 +67,7 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Salvar imagem',
-          click: () => console.log("Salvar imagem")
+          click: () => this.save()
         },
         {
           label: 'Sobre',

@@ -29,10 +29,11 @@
 import { DigitalImage, ImageUpdateParams } from './DigitalImage';
 import { grayScale, contrast, brightness, filter, threshold, borders } from './effects/filters';
 import { translate, increase, mirror, reduce, rotate } from './effects/geometrical-transformations';
-import { dilatation, erosion } from './effects/morphologyMath';
+import { dilatation, erosion } from './effects/mathematical-morphology';
 import { applyFromInputs } from './inputs';
 import { Effect, RGBImageMatrix } from './types';
 import './index.css';
+import { saveImg } from './operations';
 
 console.log('👋 This message is being logged by "renderer.ts", included via Vite');
 
@@ -163,4 +164,8 @@ const setImage = (filePath: string, imageElementId: string): HTMLImageElement =>
   }
 
   digitalImage.apply(callback);
+});
+
+(window as any).electronAPI.onSave(() => {
+  saveImg();
 });

@@ -19,5 +19,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
       callback(effect);
     });
   }),
+  onSave: ((callback: () => void) => {
+    ipcRenderer.on('save', () => {
+      callback();
+    })
+  }),
   onSendData: ((data: any) => ipcRenderer.send('set-title', data))
 });
