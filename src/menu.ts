@@ -71,7 +71,7 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Sair',
-          click: () => "Sair"
+          click: () => this.mainWindow.close()
         }
       ]
     });
