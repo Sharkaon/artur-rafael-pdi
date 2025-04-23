@@ -1,6 +1,6 @@
 import { BrowserWindow, dialog, Menu, MenuItem } from "electron";
 import { Effect } from "./types";
-
+import path from 'node:path';
 export class PDIMenuBuilder {
   private readonly mainWindow: BrowserWindow;
   private readonly menu: Menu;
@@ -36,6 +36,18 @@ export class PDIMenuBuilder {
     this.mainWindow.webContents.send('file-selected', filePath);
   }
 
+  private newWindow = () => {
+    const window = new BrowserWindow({
+        width: 380,
+        height: 200,
+            webPreferences: {
+              webSecurity: false,
+            },
+      });
+      window.loadFile(path.join(__dirname, `../../about.html`));
+      window.setMenuBarVisibility(false);  
+  }
+
   private apply(effect: Effect): void {
     this.mainWindow.webContents.send('apply', effect)
   }
@@ -55,7 +67,7 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Sobre',
-          click: () => console.log("Sobre")
+          click: () => this.newWindow()
         },
         {
           label: 'Sair',
