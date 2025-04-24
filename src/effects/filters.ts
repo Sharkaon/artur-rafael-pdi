@@ -80,19 +80,6 @@ const brightness = (pdiMatrix: RGBImageMatrix, options: {
   };
 }
 
-const applyMedianMask = (mask: [
-  [RGBPixel, RGBPixel, RGBPixel],
-  [RGBPixel, RGBPixel, RGBPixel],
-  [RGBPixel, RGBPixel, RGBPixel],
-]): RGBPixel => {
-  const pixelList = mask.flat();
-  const firstChannelList = pixelList.map((p) => p[0]);
-  const sortedPixelList = firstChannelList.sort();
-  const halfIndex = Math.floor(sortedPixelList.length / 2);
-
-  return [sortedPixelList[halfIndex], sortedPixelList[halfIndex], sortedPixelList[halfIndex], FULLY_OPAQUE];
-}
-
 // Passa alta
 const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
   const THRESHOLD_LIMIT = 100 as const;
@@ -110,15 +97,13 @@ const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
   ] as const;
 
   for (let y = 1; y < matrix.length - 1; y++) {
-    for (let x = 1; matrix[y] && x < matrix[y].length - 1; x++) {
+    for (let x = 1; x < matrix[y].length - 1; x++) {
       let xGradient = 0;
       let yGradient = 0;
 
       for (let i = 0; i < X_KERNEL.length; i++) {
-        if (!matrix[x + (i-1)]) continue;
-
         for (let j = 0; j < X_KERNEL[0].length; j++) {
-          const pixel = matrix[x + (i-1)][y + (j-1)];
+          const pixel = matrix[y + (i-1)][x + (j-1)];
           xGradient += pixel[0] * X_KERNEL[i][j];
           yGradient += pixel[0] * Y_KERNEL[i][j];
         }
@@ -136,9 +121,21 @@ const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
   }
 }
 
+const applyMedianMask = (mask: [
+  [RGBPixel, RGBPixel, RGBPixel],
+  [RGBPixel, RGBPixel, RGBPixel],
+  [RGBPixel, RGBPixel, RGBPixel],
+]): RGBPixel => {
+  const pixelList = mask.flat();
+  const firstChannelList = pixelList.map((p) => p[0]);
+  const sortedPixelList = firstChannelList.sort((a, b) => a - b);
+  const halfIndex = Math.floor(sortedPixelList.length / 2);
+
+  return [sortedPixelList[halfIndex], sortedPixelList[halfIndex], sortedPixelList[halfIndex], FULLY_OPAQUE];
+}
+
 // Passa baixa
 const filter = (matrix: RGBImageMatrix): ImageUpdateParams => {
-  console.log({ matrix });
   for (let i = 1; i < matrix[0].length - 1; i ++) {
     for (let j = 1; matrix[i] && j < matrix[i].length - 1; j++) {
       if (!matrix[i-1] || !matrix[i] || !matrix[i+1]) continue;
