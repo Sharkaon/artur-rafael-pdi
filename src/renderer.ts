@@ -29,7 +29,7 @@
 import { DigitalImage, ImageUpdateParams } from './DigitalImage';
 import { grayScale, contrast, brightness, filter, threshold, borders } from './effects/filters';
 import { translate, increase, mirror, reduce, rotate } from './effects/geometrical-transformations';
-import { dilatation, erosion } from './effects/mathematical-morphology';
+import { closing, dilatation, erosion, opening } from './effects/mathematical-morphology';
 import { applyFromInputs } from './inputs';
 import { Effect, RGBImageMatrix } from './types';
 import './index.css';
@@ -124,7 +124,9 @@ const EffectCallbacks: Record<Effect, CallbackFunc> = {
   borders: borders,
   mirror: mirror,
   dilatation: dilatation,
-  erosion: erosion
+  erosion: erosion,
+  opening: opening,
+  closing: closing,
 } as const;
 
 const setImage = (filePath: string, imageElementId: string): HTMLImageElement => {

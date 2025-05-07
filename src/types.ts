@@ -24,7 +24,9 @@ export type Effect =
   | 'mirror'
   | 'rotate'
   | 'dilatation'
-  | 'erosion';
+  | 'erosion'
+  | 'opening'
+  | 'closing';
 
 export type EffectParams =
   | { type: 'grayscale' } // No additional parameters for grayscale

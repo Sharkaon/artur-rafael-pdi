@@ -2,16 +2,17 @@ import { ImageUpdateParams } from "../DigitalImage";
 import type { AlphaChannel, RGBImageMatrix, RGBPixel } from "../types";
 const FULLY_OPAQUE: AlphaChannel = 255;
 
-
-
 const dilatation = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
     const height = pdiMatrix.length;
     const width = pdiMatrix[0].length;
     console.log("Running dilatation");
 
     const newMatrix: RGBImageMatrix = [];
+    newMatrix.push(pdiMatrix[0]);
     for(let y = 1; y < height - 1; y++){
         const newRow: RGBPixel[] = [];
+        newRow.push(pdiMatrix[y][0]);
+
         for(let x = 1; x < width - 1; x++){
             const pixelCima = pdiMatrix[y-1][x];    // cima
             const pixelEsq = pdiMatrix[y][x-1];     // esquerda
@@ -45,8 +46,12 @@ const dilatation = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
                 newRow.push(pdiMatrix[y][x]);
             }
         }
-    newMatrix.push(newRow);
+
+        newRow.push(pdiMatrix[y][width - 1]);
+        newMatrix.push(newRow);
     }
+    newMatrix.push(pdiMatrix[height - 1]);
+
     return {
         newMatrix: newMatrix,
     }
@@ -56,11 +61,13 @@ const dilatation = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
 const erosion = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
     const height = pdiMatrix.length;
     const width = pdiMatrix[0].length;
-    console.log("Running dilatation");
 
     const newMatrix: RGBImageMatrix = [];
+    newMatrix.push(pdiMatrix[0]);
     for(let y = 1; y < height - 1; y++){
         const newRow: RGBPixel[] = [];
+        newRow.push(pdiMatrix[y][0]);
+
         for(let x = 1; x < width - 1; x++){
             const pixelCima = pdiMatrix[y-1][x];    // cima
             const pixelEsq = pdiMatrix[y][x-1];     // esquerda
@@ -94,12 +101,34 @@ const erosion = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
                 newRow.push(pdiMatrix[y][x]);
             }
         }
-    newMatrix.push(newRow);
+
+        newRow.push(pdiMatrix[y][width - 1]);
+        newMatrix.push(newRow);
     }
+    newMatrix.push(pdiMatrix[height - 1]);
+
     return {
         newMatrix: newMatrix,
     }
 }
 
+const opening = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
+    const { newMatrix: erodedMatrix } = erosion(pdiMatrix);
+    const { newMatrix } = dilatation(erodedMatrix);
 
-export {dilatation, erosion}
+    return {
+        newMatrix,
+    }
+}
+
+const closing = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
+    const { newMatrix: dilatedMatrix } = dilatation(pdiMatrix);
+    const { newMatrix } = erosion(dilatedMatrix);
+
+    return {
+        newMatrix,
+    }
+}
+
+
+export { dilatation, erosion, opening, closing }

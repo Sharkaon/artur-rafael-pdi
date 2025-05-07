@@ -149,11 +149,11 @@ export class PDIMenuBuilder {
         },
         {
           label: 'Abertura',
-          click: () => console.log("Abertura")
+          click: () => this.apply('opening')
         },
         {
           label: 'Fechamento',
-          click: () => console.log("Fechamento")
+          click: () => this.apply('closing')
         },
       ]
     })
