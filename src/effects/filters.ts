@@ -85,9 +85,9 @@ const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
   const THRESHOLD_LIMIT = 200 as const;
 
   const X_KERNEL = [
-    [1, 0, -1],
-    [2, 0, -2],
-    [1, 0, -1],
+    [-1, 0, 1],
+    [-2, 0, 2],
+    [-1, 0, 1],
   ] as const;
 
   const Y_KERNEL = [
@@ -96,25 +96,25 @@ const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
     [-1, -2, -1],
   ] as const;
 
-  for (let y = 1; y < matrix.length - 1; y++) {
-    for (let x = 1; x < matrix[y].length - 1; x++) {
+  for (let height = 1; height < matrix.length - 1; height++) {
+    for (let width = 1; width < matrix[height].length - 1; width++) {
       let xGradient = 0;
       let yGradient = 0;
 
-      for (let i = 0; i < X_KERNEL.length; i++) {
-        for (let j = 0; j < X_KERNEL[0].length; j++) {
-          const pixel = matrix[y + (i-1)][x + (j-1)];
+      for (let kernelHeight = 0; kernelHeight < X_KERNEL.length; kernelHeight++) {
+        for (let kernelWidth = 0; kernelWidth < X_KERNEL[0].length; kernelWidth++) {
+          const pixel = matrix[height + (kernelHeight-1)][width + (kernelWidth-1)];
           const grayColor = pixel[0];
 
-          xGradient = xGradient + (grayColor * X_KERNEL[i][j]);
-          yGradient = yGradient + (grayColor * Y_KERNEL[i][j]);
+          xGradient += (grayColor + X_KERNEL[kernelHeight][kernelWidth]);
+          yGradient += (grayColor + Y_KERNEL[kernelHeight][kernelWidth]);
         }
       }
 
       const gradient = Math.sqrt(Math.pow(xGradient, 2) + Math.pow(yGradient, 2));
       const newPixelValue = gradient > THRESHOLD_LIMIT ? 255 : 0;
 
-      matrix[y][x] = [newPixelValue, newPixelValue, newPixelValue, matrix[y][x][3]];
+      matrix[height][width] = [newPixelValue, newPixelValue, newPixelValue, matrix[height][width][3]];
     }
   }
 
