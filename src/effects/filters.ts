@@ -83,19 +83,7 @@ const brightness = (pdiMatrix: RGBImageMatrix, options: {
 // Passa alta
 const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
   const newMatrix: RGBImageMatrix = [];
-  const THRESHOLD_LIMIT = 200 as const;
-
-  const X_KERNEL = [
-    [-1, 0, 1],
-    [-2, 0, 2],
-    [-1, 0, 1],
-  ] as const;
-
-  const Y_KERNEL = [
-    [1, 2, 1],
-    [0, 0, 0],
-    [-1, -2, -1],
-  ] as const;
+  const THRESHOLD_LIMIT = 100 as const;
 
   newMatrix.push(matrix[0]);
 
@@ -103,20 +91,23 @@ const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
     newMatrix.push([]);
     for (let width = 1; width < matrix[height].length - 1; width++) {
       newMatrix[height].push(matrix[height][0]);
-      let xGradient = 0;
-      let yGradient = 0;
+      const surroundingValues: RGBImageMatrix = [[], [], []];
 
-      for (let kernelHeight = 0; kernelHeight < X_KERNEL.length; kernelHeight++) {
-        for (let kernelWidth = 0; kernelWidth < X_KERNEL[0].length; kernelWidth++) {
+      for (let kernelHeight = 0; kernelHeight < 3; kernelHeight++) {
+        for (let kernelWidth = 0; kernelWidth < 3; kernelWidth++) {
           const pixel = matrix[height + (kernelHeight-1)][width + (kernelWidth-1)];
           const grayColor = pixel[0];
 
-          xGradient += (grayColor + X_KERNEL[kernelHeight][kernelWidth]);
-          yGradient += (grayColor + Y_KERNEL[kernelHeight][kernelWidth]);
+          surroundingValues[kernelHeight][kernelWidth] = [grayColor, grayColor, grayColor, FULLY_OPAQUE];
         }
       }
 
-      const gradient = Math.sqrt(Math.pow(xGradient, 2) + Math.pow(yGradient, 2));
+      const xGradient = (surroundingValues[0][2][0] + 2 * surroundingValues[1][2][0] + surroundingValues[2][2][0]) -
+                        (surroundingValues[0][0][0] + 2 * surroundingValues[1][0][0] + surroundingValues[2][0][0])
+      const yGradient = (surroundingValues[0][0][0] + 2 * surroundingValues[0][1][0] + surroundingValues[0][2][0]) -
+                        (surroundingValues[2][0][0] + 2 * surroundingValues[2][1][0] + surroundingValues[2][2][0])
+
+      const gradient = Math.round(Math.sqrt(Math.pow(xGradient, 2) + Math.pow(yGradient, 2)));
       const newPixelValue = gradient > THRESHOLD_LIMIT ? 255 : 0;
 
       newMatrix[height][width] = [newPixelValue, newPixelValue, newPixelValue, matrix[height][width][3]];
