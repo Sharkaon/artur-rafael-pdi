@@ -102,6 +102,22 @@ const handleRotate = (matrix: RGBImageMatrix) => {
     ], rotate)
 }
 
+const handleThreshold = (matrix: RGBImageMatrix) => {
+  applyFromInputs(digitalImage, [{
+    label: "Limite de Threshold",
+    name: "thresholdLimit",
+    type: "number",
+  }], threshold);
+}
+
+const handleBorders = (matrix: RGBImageMatrix) => {
+  applyFromInputs(digitalImage, [{
+    label: "Limite de Threshold",
+    name: "thresholdLimit",
+    type: "number",
+  }], borders);
+}
+
 // const handleMirror = (matrix: RGBImageMatrix) => {
 //   applyFromInputs(digitalImage, [{
 //     label: 'vertical',
@@ -113,7 +129,7 @@ const handleRotate = (matrix: RGBImageMatrix) => {
 
 const EffectCallbacks: Record<Effect, CallbackFunc> = {
   grayscale: grayScale,
-  threshold: threshold,
+  threshold: handleThreshold,
   contrast: handleContrast,
   translate: handleTranslate,
   brightness: handleBrightness,
@@ -121,7 +137,7 @@ const EffectCallbacks: Record<Effect, CallbackFunc> = {
   reduce: handleReduce,
   rotate: handleRotate,
   filter: filter,
-  borders: borders,
+  borders: handleBorders,
   mirror: mirror,
   dilatation: dilatation,
   erosion: erosion,

@@ -17,15 +17,17 @@ const grayScale = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
   };
 }
 
-const threshold = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
-  const THRESHOLD_LIMIT = 100 as const;
+const threshold = (pdiMatrix: RGBImageMatrix, options: {
+  thresholdLimit: number;
+}): ImageUpdateParams => {
+  const { thresholdLimit } = options;
 
   pdiMatrix.forEach((row) => {
     for(let j = 0; j < row.length; j++) {
 
       const pixel = row[j]
       const [Gray, _B, _G, Alpha] = pixel;
-      const newPixelValue = Gray > THRESHOLD_LIMIT ? 255 : 0;
+      const newPixelValue = Gray > thresholdLimit ? 255 : 0;
 
       row[j] = [newPixelValue, newPixelValue, newPixelValue, Alpha];
     }
@@ -81,9 +83,11 @@ const brightness = (pdiMatrix: RGBImageMatrix, options: {
 }
 
 // Passa alta
-const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
+const borders = (matrix: RGBImageMatrix, options: {
+  thresholdLimit: number;
+}): ImageUpdateParams => {
   const newMatrix: RGBImageMatrix = [];
-  const THRESHOLD_LIMIT = 100 as const;
+  const { thresholdLimit } = options;
 
   newMatrix.push(matrix[0]);
 
@@ -108,7 +112,7 @@ const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
                         (surroundingValues[2][0][0] + 2 * surroundingValues[2][1][0] + surroundingValues[2][2][0])
 
       const gradient = Math.round(Math.sqrt(Math.pow(xGradient, 2) + Math.pow(yGradient, 2)));
-      const newPixelValue = gradient > THRESHOLD_LIMIT ? 255 : 0;
+      const newPixelValue = gradient > thresholdLimit ? 255 : 0;
 
       newMatrix[height][width] = [newPixelValue, newPixelValue, newPixelValue, matrix[height][width][3]];
     }
