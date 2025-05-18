@@ -82,6 +82,7 @@ const brightness = (pdiMatrix: RGBImageMatrix, options: {
 
 // Passa alta
 const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
+  const newMatrix: RGBImageMatrix = [];
   const THRESHOLD_LIMIT = 200 as const;
 
   const X_KERNEL = [
@@ -96,8 +97,12 @@ const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
     [-1, -2, -1],
   ] as const;
 
+  newMatrix.push(matrix[0]);
+
   for (let height = 1; height < matrix.length - 1; height++) {
+    newMatrix.push([]);
     for (let width = 1; width < matrix[height].length - 1; width++) {
+      newMatrix[height].push(matrix[height][0]);
       let xGradient = 0;
       let yGradient = 0;
 
@@ -114,12 +119,15 @@ const borders = (matrix: RGBImageMatrix): ImageUpdateParams => {
       const gradient = Math.sqrt(Math.pow(xGradient, 2) + Math.pow(yGradient, 2));
       const newPixelValue = gradient > THRESHOLD_LIMIT ? 255 : 0;
 
-      matrix[height][width] = [newPixelValue, newPixelValue, newPixelValue, matrix[height][width][3]];
+      newMatrix[height][width] = [newPixelValue, newPixelValue, newPixelValue, matrix[height][width][3]];
     }
+    newMatrix[height].push(matrix[height].at(-1));
   }
 
+  newMatrix.push(matrix.at(-1));
+
   return {
-    newMatrix: matrix,
+    newMatrix,
   }
 }
 
