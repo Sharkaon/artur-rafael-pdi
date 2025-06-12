@@ -34,6 +34,7 @@ import { applyFromInputs } from './inputs';
 import { Effect, RGBImageMatrix } from './types';
 import './index.css';
 import { saveImg } from './operations';
+import { countPills } from './effects/challenge';
 
 console.log('👋 This message is being logged by "renderer.ts", included via Vite');
 
@@ -143,6 +144,7 @@ const EffectCallbacks: Record<Effect, CallbackFunc> = {
   erosion: erosion,
   opening: opening,
   closing: closing,
+  countPills: countPills,
 } as const;
 
 const setImage = (filePath: string, imageElementId: string): HTMLImageElement => {

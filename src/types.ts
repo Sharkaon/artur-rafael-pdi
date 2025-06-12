@@ -26,7 +26,8 @@ export type Effect =
   | 'dilatation'
   | 'erosion'
   | 'opening'
-  | 'closing';
+  | 'closing'
+  | 'countPills';
 
 export type EffectParams =
   | { type: 'grayscale' } // No additional parameters for grayscale

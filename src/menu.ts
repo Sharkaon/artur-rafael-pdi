@@ -158,7 +158,13 @@ export class PDIMenuBuilder {
       ]
     })
     const featureExtractionMenuItem = new MenuItem({
-      label: "DESAFIO"
+      label: "DESAFIO",
+      submenu: [
+        {
+          label: 'Contagem de Pilula',
+          click: () => this.apply('countPills'),
+        }
+      ]
     })
 
     const viewMenuItem = new MenuItem({
