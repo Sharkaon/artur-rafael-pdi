@@ -62,16 +62,6 @@ function labelConnectedComponents(binaryImage: BinaryImage): number[][] {
   return labels;
 }
 
-function countLabels(labels: number[][]): number {
-  const labelSet = new Set<number>();
-  for (const row of labels) {
-    for (const label of row) {
-      if (label > 0) labelSet.add(label);
-    }
-  }
-  return labelSet.size;
-}
-
 
 function getObjectBoundingBoxes(labels: number[][]): BoundingBox[] {
   const map = new Map<number, { minX: number; maxX: number; minY: number; maxY: number; count: number }>();
