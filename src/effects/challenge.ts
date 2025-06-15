@@ -13,6 +13,8 @@ type BoundingBox = {
   pixelCount: number;
 };
 
+type ItemClassification = { comprimidos: number, pilulas: number, ignorados: number };
+
 //transforma em binários para facilitar a seleção
 function toBinaryMatrix(img: RGBImageMatrix): BinaryImage {
   return img.map(row =>
@@ -62,7 +64,6 @@ function labelConnectedComponents(binaryImage: BinaryImage): number[][] {
   return labels;
 }
 
-
 function getObjectBoundingBoxes(labels: number[][]): BoundingBox[] {
   const map = new Map<number, { minX: number; maxX: number; minY: number; maxY: number; count: number }>();
 
@@ -103,7 +104,7 @@ function getObjectBoundingBoxes(labels: number[][]): BoundingBox[] {
   return results;
 }
 
-function classifyObjects(boxes: BoundingBox[]): { comprimidos: number, pilulas: number, ignorados: number } {
+function classifyObjects(boxes: BoundingBox[]): ItemClassification {
   let comprimidos = 0;
   let pilulas = 0;
   let ignorados = 0;
@@ -128,8 +129,28 @@ function classifyObjects(boxes: BoundingBox[]): { comprimidos: number, pilulas: 
   return { comprimidos, pilulas, ignorados };
 }
 
+const clearPreviousResult = (newId: string) => {
+  const resultParagraphs = document.getElementsByClassName('result');
 
+  for (const result of resultParagraphs) {
+    if (result.id !== newId)
+      result.remove();
+  }
+}
 
+const showResult = ({
+  comprimidos,
+  ignorados,
+  pilulas,
+}: ItemClassification, id: string) => {
+  const resultParagraph = document.createElement('p');
+  resultParagraph.className = 'result';
+  resultParagraph.id = id;
+  resultParagraph.innerHTML = `A imagem contém ${comprimidos} comprimido(s) circular(es); ${pilulas} pilula(s) oval(is) e ${ignorados} medicamento(s) que deve(m) ser descartado(s).`;
+
+  const resultDiv = document.getElementById('results') as HTMLDivElement;
+  resultDiv.appendChild(resultParagraph);
+}
 
 export const countPills = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
   const { newMatrix: thresholdMatrix } = threshold(pdiMatrix, {
@@ -137,14 +158,17 @@ export const countPills = (pdiMatrix: RGBImageMatrix): ImageUpdateParams => {
   });
   const { newMatrix: dilatatedMatrix } = dilatation(thresholdMatrix);
 
-  const BinaryImage = toBinaryMatrix(dilatatedMatrix)
+  const binaryImage = toBinaryMatrix(dilatatedMatrix);
 
-  const labels = labelConnectedComponents(BinaryImage)
+  const labels = labelConnectedComponents(binaryImage);
 
-  const objects = getObjectBoundingBoxes(labels)
+  const objects = getObjectBoundingBoxes(labels);
 
-  const items = classifyObjects(objects)
+  const items = classifyObjects(objects);
 
-  console.log(items)
+  const newResultId = new Date().toISOString();
+
+  clearPreviousResult(newResultId);
+  showResult(items, newResultId);
   return { newMatrix: dilatatedMatrix };
 }
