@@ -146,7 +146,7 @@ const showResult = ({
   const resultParagraph = document.createElement('p');
   resultParagraph.className = 'result';
   resultParagraph.id = id;
-  resultParagraph.innerHTML = `A imagem contém ${comprimidos} comprimido(s) circular(es); ${pilulas} pilula(s) oval(is) e ${ignorados} medicamento(s) que deve(m) ser descartado(s).`;
+  resultParagraph.innerHTML = `A imagem contém ${comprimidos} comprimido(s) redondo(s); ${pilulas} pilula(s) oval(is) e ${ignorados} medicamento(s) que deve(m) ser descartado(s). No total são ${pilulas + comprimidos + ignorados} medicamentos, dos quais ${pilulas + comprimidos} são váliidos.`;
 
   const resultDiv = document.getElementById('results') as HTMLDivElement;
   resultDiv.appendChild(resultParagraph);
